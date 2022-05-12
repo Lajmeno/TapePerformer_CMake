@@ -26,8 +26,7 @@ WaveDisplay::WaveDisplay(TapePerformerAudioProcessor& p) : audioProcessor(p)
 }
 
 WaveDisplay::~WaveDisplay()
-{
-}
+= default;
 
 void WaveDisplay::paint (juce::Graphics& g)
 {
@@ -73,7 +72,7 @@ void WaveDisplay::resized()
 
 bool WaveDisplay::isInterestedInFileDrag(const juce::StringArray &files)
 {
-    for ( auto file:files)
+    for ( const auto& file:files)
     {
         if (file.contains(".wav")||file.contains(".mp3")||file.contains(".aif"))
         {
@@ -86,7 +85,7 @@ bool WaveDisplay::isInterestedInFileDrag(const juce::StringArray &files)
 
 void WaveDisplay::filesDropped(const juce::StringArray &files, int x, int y)
 {
-    for ( auto file:files)
+    for ( const auto& file:files)
     {
         if (isInterestedInFileDrag(files))
         {
@@ -144,7 +143,7 @@ void WaveDisplay::paintIfFileLoaded (juce::Graphics& g, const juce::Rectangle<in
     if (auto sound = dynamic_cast<GrainSound*>(audioProcessor.mSampler.getSound(0).get()))
     {
         auto& numKeys = *audioProcessor.apvts.getRawParameterValue("numKeys");
-        auto numFragments = numKeys ?  12 : 24;
+        auto numFragments = numKeys > 0 ?  12 : 24;
         auto widthOfFragment = *audioProcessor.apvts.getRawParameterValue("duration") * audioLength;
         auto initialXPosition = *audioProcessor.apvts.getRawParameterValue("position") * audioLength;
         auto& spreadParam = *audioProcessor.apvts.getRawParameterValue("spread");
@@ -153,7 +152,7 @@ void WaveDisplay::paintIfFileLoaded (juce::Graphics& g, const juce::Rectangle<in
         for (int i = 0; i < numFragments; i++)
         {
             
-            juce::Rectangle<int> fragmentBounds (initialXPosition / audioLength * thumbnailBounds.getWidth(), 0, widthOfFragment / audioLength * thumbnailBounds.getWidth(), thumbnailBounds.getHeight());
+            juce::Rectangle<float> fragmentBounds (initialXPosition / audioLength * thumbnailBounds.getWidth(), 0, widthOfFragment / audioLength * thumbnailBounds.getWidth(), thumbnailBounds.getHeight());
 
             initialXPosition = std::fmod(initialXPosition + (audioLength / numFragments) * spreadParam, audioLength);
             
@@ -163,11 +162,11 @@ void WaveDisplay::paintIfFileLoaded (juce::Graphics& g, const juce::Rectangle<in
             
             if( initialXPosition + widthOfFragment > audioLength)
             {
-                juce::Rectangle<int> fragmentBounds (0, 0, ( (initialXPosition + widthOfFragment) - audioLength) / audioLength * thumbnailBounds.getWidth(), thumbnailBounds.getHeight());
+                juce::Rectangle<float> fragmentWrapped (0, 0, ( (initialXPosition + widthOfFragment) - audioLength) / audioLength * thumbnailBounds.getWidth(), thumbnailBounds.getHeight());
                 
 //                auto purpleHue = juce::Colours::darkgrey.getHue();
 //                g.setColour (juce::Colour::fromHSV (purpleHue, 0.3f, 0.5f, 0.25f));
-                g.fillRect (fragmentBounds);
+                g.fillRect (fragmentWrapped);
                 
             }
         }
@@ -181,5 +180,5 @@ void WaveDisplay::paintIfNoFileLoaded (juce::Graphics& g, const juce::Rectangle<
     g.setColour (juce::Colours::black);
     g.fillRect (thumbnailBounds);
     g.setColour (juce::Colours::white);
-    g.drawFittedText ("Drag and Drops a File here", thumbnailBounds, juce::Justification::centred, 1);
+    g.drawFittedText ("Drag and Dropsy a File here", thumbnailBounds, juce::Justification::centred, 1);
 }

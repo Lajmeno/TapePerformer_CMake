@@ -33,11 +33,11 @@ public:
     bool appliesToChannel (int midiChannel) override;
     
     int getNumOfKeysAvailable() { return numOfKeysAvailable; }
-    int getDurationParam() { return durationParam; }
+    double getDurationParam() { return durationParam; }
     double getPositionsParam() { return positionParam; }
     float getSpreadParam() { return spreadParam; }
     
-    void updateParams(const bool mode, const bool availableKeys, const float position, const float duration, const float spread);
+    void updateParams(float mode, float availableKeys, double position, double duration, float spread);
   
     
     
@@ -56,10 +56,10 @@ private:
     
     bool pitchModeParam = false;
     double positionParam = 11025;
-    float transpositionParam = 60.0;   //midiRoot
+    float transpositionParam = 60.0f;   //midiRoot
     double durationParam = 36075;
     int numOfKeysAvailable = 12;
-    float spreadParam = 0.2;
+    float spreadParam = 0.2f;
     
 //    JUCE_LEAK_DETECTOR (GrainSound)
 };

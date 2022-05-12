@@ -178,7 +178,6 @@ void TapePerformerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer
         auto& position = *apvts.getRawParameterValue("position");
         auto& duration = *apvts.getRawParameterValue("duration");
         auto& spread = *apvts.getRawParameterValue("spread");
-       //WavetableEnvelope::setEnvelopeShape(*apvts.getRawParameterValue("envShape"));
         sound->updateParams(mode, (int)availableKeys, (double)position, (double)duration, spread);
         
     }

@@ -41,7 +41,6 @@ class WavetableEnvelope
 public:
     WavetableEnvelope ()
     {
-        envelopeShape = 1.0f;
     }
 
     void setFrequency (float frequency, float sampleRate)
@@ -84,7 +83,7 @@ public:
         for (unsigned int i = 0; i < tableSize; ++i)
         {
             float x = (i - 512.0f) / 256.0f ;
-            float sample = std::pow(std::exp(-x*x), envelopeShape);
+            float sample = std::pow(std::exp(-x*x), 1.0f);
             samples[i] = (float) sample;
             /*
             auto sample = std::sin (currentAngle);
@@ -100,15 +99,10 @@ public:
         return wavetable;
     }
 
-    void static setEnvelopeShape(float param){
-        envelopeShape = param;
-    }
-    
 
 private:
     juce::AudioSampleBuffer wavetable;
 
-    static float envelopeShape;
     const unsigned int tableSize = 1 << 10;
     float currentIndex = 0.0f, tableDelta = 0.0f;
 };

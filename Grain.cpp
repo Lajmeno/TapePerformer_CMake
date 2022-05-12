@@ -51,9 +51,9 @@ bool GrainSound::appliesToChannel (int /*midiChannel*/)
     return true;
 }
 
-void GrainSound::updateParams(const bool mode, const bool availableKeys, const float position, const float duration, const float spread)
+void GrainSound::updateParams(float mode, float availableKeys, double position, double duration, float spread)
 {
-    pitchModeParam = !mode;
+    pitchModeParam = mode > 0;
     
     numOfKeysAvailable = (availableKeys == 1) ? 12 : 24;
     

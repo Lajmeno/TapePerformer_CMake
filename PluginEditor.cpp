@@ -8,6 +8,8 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+
+#include <utility>
 #include "WaveDisplay.h"
 
 //==============================================================================
@@ -83,12 +85,12 @@ void TapePerformerAudioProcessorEditor::paint (juce::Graphics& g)
 
 void TapePerformerAudioProcessorEditor::resized()
 {
-    
+
     auto bounds = getLocalBounds();
-    auto responseArea = bounds.removeFromTop(bounds.getHeight()* 0.5);
-    auto gainArea = bounds.removeFromRight(bounds.getWidth() * 0.1);
-    auto waveEnvArea = bounds.removeFromRight(bounds.getWidth() * 0.2);
-    auto waveEnvParams = waveEnvArea.removeFromTop(bounds.getHeight() * 0.3);
+    auto responseArea = bounds.removeFromTop(static_cast<int>(bounds.getHeight() * 0.5));
+    auto gainArea = bounds.removeFromRight(static_cast<int>(bounds.getWidth() * 0.1));
+    auto waveEnvArea = bounds.removeFromRight(static_cast<int>(bounds.getWidth() * 0.2));
+    auto waveEnvParams = waveEnvArea.removeFromTop(static_cast<int>(bounds.getHeight() * 0.3));
     
     waveDisplay.setBounds(responseArea.reduced(4));
     envDisplay.setBounds(waveEnvArea.reduced(4));
@@ -110,9 +112,9 @@ void TapePerformerAudioProcessorEditor::resized()
     lessKeysButton.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
     moreKeysButton.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
     
-    positionSlider.setBounds(positionArea.removeFromTop(positionArea.getHeight() * 0.5));
-    durationSlider.setBounds(durationArea.removeFromTop(durationArea.getHeight() * 0.5));
-    spreadSlider.setBounds(spreadArea.removeFromTop(spreadArea.getHeight() * 0.5));
+    positionSlider.setBounds(positionArea.removeFromTop(static_cast<int>(positionArea.getHeight() * 0.5)));
+    durationSlider.setBounds(durationArea.removeFromTop(static_cast<int>(durationArea.getHeight() * 0.5)));
+    spreadSlider.setBounds(spreadArea.removeFromTop(static_cast<int>(spreadArea.getHeight() * 0.5)));
     gainSlider.setBounds(gainArea);
     envShapeSlider.setBounds(waveEnvParams);
 
@@ -132,5 +134,5 @@ void TapePerformerAudioProcessorEditor::updateToggleState (juce::Button* button,
     auto state = button->getToggleState();
     juce::String stateString = state ? "ON" : "OFF";
 
-    juce::Logger::outputDebugString (name + " Button changed to " + stateString);
+    juce::Logger::outputDebugString (std::move(name) + " Button changed to " + stateString);
 }
