@@ -85,7 +85,11 @@ bool GrainVoice::canPlaySound (juce::SynthesiserSound* sound)
 
 void GrainVoice::startNote (int midiNoteNumber, float velocity, juce::SynthesiserSound* s, int /*currentPitchWheelPosition*/)
 {
-    envCurve.createWavetableEnv();
+    if(envShapeValue != WavetableEnvelope::envelopeShape) {
+        envCurve.createWavetableEnv();
+        envShapeValue = WavetableEnvelope::envelopeShape;
+    }
+
     if (auto* sound = dynamic_cast< GrainSound*> (s)) //deleted const before GrainSound* to make set startPosition work
     {
         currentMiniNumber = midiNoteNumber;
