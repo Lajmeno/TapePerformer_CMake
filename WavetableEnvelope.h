@@ -105,6 +105,8 @@ public:
 private:
     juce::AudioSampleBuffer wavetable;
 
+
+
     const unsigned int tableSize = 1 << 10;
     float currentIndex = 0.0f, tableDelta = 0.0f;
 };

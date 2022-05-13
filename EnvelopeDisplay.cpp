@@ -16,6 +16,7 @@ EnvelopeDisplay::EnvelopeDisplay() : envCurve()
 {
 
     envCurve.setFrequency(8, 44100);
+    startTimer(40);
 
 }
 
@@ -30,7 +31,7 @@ void EnvelopeDisplay::paint (juce::Graphics& g)
     
     auto bounds = getLocalBounds();
     
-    auto waveDisplayArea = bounds.removeFromTop(bounds.getHeight()* 0.75);
+    //auto waveDisplayArea = bounds.removeFromTop(bounds.getHeight()* 0.75);
     
     
 
@@ -39,8 +40,10 @@ void EnvelopeDisplay::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
 
-    waveDisplayArea.reduce(4, 4);
-    drawWaveform(g, waveDisplayArea);
+    auto waveDrawArea = bounds.reduced(4);
+    drawWaveform(g, bounds);
+
+    //g.fillRect (waveDrawArea);
     
 }
 
@@ -52,7 +55,7 @@ void EnvelopeDisplay::resized()
 }
 
 
-void EnvelopeDisplay::drawWaveform(juce::Graphics& g, const juce::Rectangle<int>& waveDisplayArea)
+void EnvelopeDisplay::drawWaveform(juce::Graphics& g, const juce::Rectangle<int>& waveDrawArea)
 {
     envCurve.createWavetableEnv();
     
@@ -60,7 +63,9 @@ void EnvelopeDisplay::drawWaveform(juce::Graphics& g, const juce::Rectangle<int>
     auto* samples = wavetable.getReadPointer(0);
     
     for (int i = 0; i < wavetable.getNumSamples(); i++){
-        g.drawVerticalLine((int)((waveDisplayArea.getWidth() / 1024.0f) * i),  waveDisplayArea.getHeight() - samples[i] * (waveDisplayArea.getHeight()) ,waveDisplayArea.getHeight());
+        g.drawVerticalLine((int)(((waveDrawArea.getWidth() - 4) / 1024.0f) * (i + 15)),
+                           (waveDrawArea.getHeight() + 2) - samples[i] * waveDrawArea.getHeight() ,
+                           waveDrawArea.getHeight() - 2);
     }
 
 }
