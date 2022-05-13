@@ -69,11 +69,11 @@ juce_generate_juce_header(TapePerformer)
 
 target_sources(TapePerformer
     PRIVATE
-        PluginEditor.cpp
-        PluginProcessor.cpp
-        EnvelopeDisplay.cpp
-        Grain.cpp
-        WaveDisplay.cpp)
+        source/PluginEditor.cpp
+        source/PluginProcessor.cpp
+        source/EnvelopeDisplay.cpp
+        source/Grain.cpp
+        source/WaveDisplay.cpp)
 
 # `target_compile_definitions` adds some preprocessor definitions to our target. In a Projucer
 # project, these might be passed in the 'Preprocessor Definitions' field. JUCE modules also make use
