@@ -75,21 +75,13 @@ public:
         wavetable.setSize (1, (int) tableSize + 1);
         auto* samples = wavetable.getWritePointer (0);
 
-        /*
-        auto angleDelta = juce::MathConstants<double>::twoPi / (double) (tableSize - 1);
-        auto currentAngle = 0.0;
-         */
+        float envShapeParam = envelopeShape  * 4 + 0.5f;
 
         for (unsigned int i = 0; i < tableSize; ++i)
         {
             float x = (i - 512.0f) / 256.0f ;
-            float sample = std::pow(std::exp(-x*x), 1.0f);
+            float sample = std::pow(std::exp(-x*x), envShapeParam);
             samples[i] = (float) sample;
-            /*
-            auto sample = std::sin (currentAngle);
-            samples[i] = (float) sample;
-            currentAngle += angleDelta;
-             */
         }
 
         samples[tableSize] = samples[0];
@@ -99,9 +91,13 @@ public:
         return wavetable;
     }
 
+    static float envelopeShape;
+
 
 private:
     juce::AudioSampleBuffer wavetable;
+
+
 
     const unsigned int tableSize = 1 << 10;
     float currentIndex = 0.0f, tableDelta = 0.0f;

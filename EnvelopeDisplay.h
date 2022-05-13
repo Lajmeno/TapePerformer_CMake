@@ -25,15 +25,21 @@ public:
 
     void paint (juce::Graphics&) override;
     void resized() override;
-    
+
     
 
 private:
     void timerCallback() override
     {
-        //repaint();
+        if(envShapeValue != WavetableEnvelope::envelopeShape)
+        {
+            repaint();
+            envShapeValue = WavetableEnvelope::envelopeShape;
+        }
     }
     void drawWaveform(juce::Graphics& g, const juce::Rectangle<int>& waveDisplayArea);
+
+    float envShapeValue = 1.0f;
     
     WavetableEnvelope envCurve;
 

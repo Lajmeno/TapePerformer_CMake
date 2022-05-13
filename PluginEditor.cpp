@@ -90,7 +90,7 @@ void TapePerformerAudioProcessorEditor::resized()
     auto responseArea = bounds.removeFromTop(static_cast<int>(bounds.getHeight() * 0.5));
     auto gainArea = bounds.removeFromRight(static_cast<int>(bounds.getWidth() * 0.1));
     auto waveEnvArea = bounds.removeFromRight(static_cast<int>(bounds.getWidth() * 0.2));
-    auto waveEnvParams = waveEnvArea.removeFromTop(static_cast<int>(bounds.getHeight() * 0.3));
+    auto waveEnvParams = waveEnvArea.removeFromBottom(static_cast<int>(bounds.getHeight() * 0.3));
     
     waveDisplay.setBounds(responseArea.reduced(4));
     envDisplay.setBounds(waveEnvArea.reduced(4));

@@ -170,6 +170,8 @@ void TapePerformerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer
 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
+
+    WavetableEnvelope::envelopeShape = *apvts.getRawParameterValue("envShape");
     
     if (auto sound = dynamic_cast<GrainSound*>(mSampler.getSound(0).get()))
     {
@@ -321,4 +323,6 @@ juce::AudioProcessorValueTreeState::ParameterLayout TapePerformerAudioProcessor:
     return params;
 
 }
+
+float WavetableEnvelope::envelopeShape{1};
 

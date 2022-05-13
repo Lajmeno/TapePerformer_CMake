@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "Grain.h"
+#include "WavetableEnvelope.h"
 
 //==============================================================================
 /**
@@ -63,7 +64,6 @@ public:
     
     juce::AudioThumbnailCache thumbnailCache;
     juce::AudioThumbnail thumbnail;
-//    juce::AudioTransportSource transportSource;
     juce::Synthesiser mSampler;
 
     int midiNoteForNormalPitch = 60;

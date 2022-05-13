@@ -110,6 +110,7 @@ private:
     float lgain = 0, rgain = 0;
     
 
+    float envShapeValue = 1.0f;
     
     
 
