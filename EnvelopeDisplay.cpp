@@ -14,9 +14,8 @@
 //==============================================================================
 EnvelopeDisplay::EnvelopeDisplay() : envCurve()
 {
-    envCurve.createWavetableEnv();
+
     envCurve.setFrequency(8, 44100);
-    startTimer(40);
 
 }
 
@@ -55,6 +54,7 @@ void EnvelopeDisplay::resized()
 
 void EnvelopeDisplay::drawWaveform(juce::Graphics& g, const juce::Rectangle<int>& waveDisplayArea)
 {
+    envCurve.createWavetableEnv();
     
     auto wavetable = envCurve.getWavetable();
     auto* samples = wavetable.getReadPointer(0);

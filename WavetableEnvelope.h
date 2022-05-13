@@ -83,7 +83,7 @@ public:
         for (unsigned int i = 0; i < tableSize; ++i)
         {
             float x = (i - 512.0f) / 256.0f ;
-            float sample = std::pow(std::exp(-x*x), 1.0f);
+            float sample = std::pow(std::exp(-x*x), envelopeShape);
             samples[i] = (float) sample;
             /*
             auto sample = std::sin (currentAngle);
@@ -98,6 +98,8 @@ public:
     juce::AudioSampleBuffer getWavetable (){
         return wavetable;
     }
+
+    static float envelopeShape;
 
 
 private:

@@ -53,7 +53,7 @@ bool GrainSound::appliesToChannel (int /*midiChannel*/)
 
 void GrainSound::updateParams(float mode, float availableKeys, double position, double duration, float spread)
 {
-    pitchModeParam = mode > 0;
+    pitchModeParam = mode < 1;
     
     numOfKeysAvailable = (availableKeys == 1) ? 12 : 24;
     
@@ -71,7 +71,7 @@ void GrainSound::updateParams(float mode, float availableKeys, double position, 
 //==============================================================================
 GrainVoice::GrainVoice() : envCurve()  //: createWavetableEnv(), envCurve(envTable) {
 {
-    envCurve.createWavetableEnv();
+
 //    envCurve = new WavetableEnvelope(envTable);
 //    envCurve.add(envCurves);
     
@@ -85,6 +85,7 @@ bool GrainVoice::canPlaySound (juce::SynthesiserSound* sound)
 
 void GrainVoice::startNote (int midiNoteNumber, float velocity, juce::SynthesiserSound* s, int /*currentPitchWheelPosition*/)
 {
+    envCurve.createWavetableEnv();
     if (auto* sound = dynamic_cast< GrainSound*> (s)) //deleted const before GrainSound* to make set startPosition work
     {
         currentMiniNumber = midiNoteNumber;

@@ -16,8 +16,7 @@
 //==============================================================================
 /*
 */
-class EnvelopeDisplay  : public juce::Component,
-                         private juce::Timer
+class EnvelopeDisplay  : public juce::Component
 {
 public:
     EnvelopeDisplay();
@@ -29,10 +28,6 @@ public:
     
 
 private:
-    void timerCallback() override
-    {
-        //repaint();
-    }
     void drawWaveform(juce::Graphics& g, const juce::Rectangle<int>& waveDisplayArea);
     
     WavetableEnvelope envCurve;
