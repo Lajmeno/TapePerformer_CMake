@@ -130,7 +130,7 @@ void GrainVoice::startNote (int midiNoteNumber, float velocity, juce::Synthesise
     }
 }
 
-void GrainVoice::stopNote (float /*velocity*/, bool allowTailOff)
+void GrainVoice::stopNote (float velocity, bool allowTailOff)
 {
     if (allowTailOff)
     {
@@ -139,7 +139,8 @@ void GrainVoice::stopNote (float /*velocity*/, bool allowTailOff)
     else
     {
         clearCurrentNote();
-        adsr.reset();
+        adsr.noteOff();
+        //adsr.reset();
     }
 }
 
@@ -173,8 +174,8 @@ void GrainVoice::renderNextBlock (juce::AudioBuffer<float>& outputBuffer, int st
             auto envelopeValue = adsr.getNextSample();
             auto envTableValue = envCurve.getNextSample();
 
-            l *= lgain * envelopeValue * envTableValue;
-            r *= rgain * envelopeValue * envTableValue;
+            l *= lgain * envTableValue * envelopeValue;
+            r *= rgain * envTableValue * envelopeValue;
 
             if (outR != nullptr)
             {
@@ -193,8 +194,8 @@ void GrainVoice::renderNextBlock (juce::AudioBuffer<float>& outputBuffer, int st
             
             if (!isKeyDown())
             {
-                stopNote (0.0f, false);
-                break;
+                stopNote (0.0f, true);
+                //break;
             }
             else if (numPlayedSamples > playingSound->durationParam)
             {

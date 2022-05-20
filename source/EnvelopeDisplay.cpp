@@ -63,7 +63,7 @@ void EnvelopeDisplay::drawWaveform(juce::Graphics& g, const juce::Rectangle<int>
     auto* samples = wavetable.getReadPointer(0);
     
     for (int i = 0; i < wavetable.getNumSamples(); i++){
-        g.drawVerticalLine((int)(((waveDrawArea.getWidth() - 4) / 1024.0f) * (i + 15)),
+        g.drawVerticalLine((int)(((waveDrawArea.getWidth() - 4) / 2048.0f) * (i + 15)),
                            (waveDrawArea.getHeight() + 2) - samples[i] * waveDrawArea.getHeight(),
                            waveDrawArea.getHeight() - 2);
     }

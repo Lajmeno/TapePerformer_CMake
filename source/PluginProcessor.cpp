@@ -271,7 +271,7 @@ void TapePerformerAudioProcessor::loadFile()
                 
                 juce::BigInteger range;
                 range.setRange(0, 127, true);
-                mSampler.addSound(new GrainSound("Sample", *mFormatReader, range, midiNoteForNormalPitch, 0, 0, 180));
+                mSampler.addSound(new GrainSound("Sample", *mFormatReader, range, midiNoteForNormalPitch, 0.3f, 0.1f, 180));
             }
         }
     });
@@ -289,7 +289,7 @@ void TapePerformerAudioProcessor::loadFile(const juce::String &path)
     juce::BigInteger range;
     range.setRange(0, 127, true);
     
-    mSampler.addSound(new GrainSound("Sample", *mFormatReader, range, midiNoteForNormalPitch, 0, 0, 180));
+    mSampler.addSound(new GrainSound("Sample", *mFormatReader, range, midiNoteForNormalPitch, 0.3f, 0.1f, 180));
     
 //    wavePlayPosition = 0;
 }
@@ -318,7 +318,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout TapePerformerAudioProcessor:
     
     params.add(std::make_unique<juce::AudioParameterFloat>("gain", "Gain", 0.0f, 1.0f, 0.7f));
     
-    params.add(std::make_unique<juce::AudioParameterFloat>("envShape", "Shape", 0.0f, 1.0f, 0.7f));
+    params.add(std::make_unique<juce::AudioParameterFloat>("envShape", "Shape", 0.0f, 1.0f, 0.0f));
         
     return params;
 
