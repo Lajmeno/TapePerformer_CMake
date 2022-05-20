@@ -33,7 +33,7 @@ public:
     bool appliesToChannel (int midiChannel) override;
     
     int getNumOfKeysAvailable() { return numOfKeysAvailable; }
-    double getDurationParam() { return durationParam; }
+    long getDurationParam() { return durationParam; }
     double getPositionsParam() { return positionParam; }
     float getSpreadParam() { return spreadParam; }
     
@@ -57,7 +57,7 @@ private:
     bool pitchModeParam = false;
     double positionParam = 11025;
     float transpositionParam = 60.0f;   //midiRoot
-    double durationParam = 36075;
+    long durationParam = 36075;
     int numOfKeysAvailable = 12;
     float spreadParam = 0.2f;
     

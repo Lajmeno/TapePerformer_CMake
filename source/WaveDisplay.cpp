@@ -180,5 +180,5 @@ void WaveDisplay::paintIfNoFileLoaded (juce::Graphics& g, const juce::Rectangle<
     g.setColour (juce::Colours::black);
     g.fillRect (thumbnailBounds);
     g.setColour (juce::Colours::white);
-    g.drawFittedText ("Drag and Drop a File here!", thumbnailBounds, juce::Justification::centred, 1);
+    g.drawFittedText ("Drag and Drop a File here!!!", thumbnailBounds, juce::Justification::centred, 1);
 }
