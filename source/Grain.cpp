@@ -139,8 +139,7 @@ void GrainVoice::stopNote (float velocity, bool allowTailOff)
     else
     {
         clearCurrentNote();
-        adsr.noteOff();
-        //adsr.reset();
+        adsr.reset();
     }
 }
 
@@ -168,8 +167,7 @@ void GrainVoice::renderNextBlock (juce::AudioBuffer<float>& outputBuffer, int st
 
             // just using a very simple linear interpolation here..
             float l = (inL[pos] * invAlpha + inL[pos + 1] * alpha);
-            float r = (inR != nullptr) ? (inR[pos] * invAlpha + inR[pos + 1] * alpha)
-                                       : l;
+            float r = (inR != nullptr) ? (inR[pos] * invAlpha + inR[pos + 1] * alpha) : l;
 
             auto envelopeValue = adsr.getNextSample();
             auto envTableValue = envCurve.getNextSample();
@@ -194,8 +192,8 @@ void GrainVoice::renderNextBlock (juce::AudioBuffer<float>& outputBuffer, int st
             
             if (!isKeyDown())
             {
+                //need to make this only be called once (maybe once a block) - at the moment it is called for every sample in the block
                 stopNote (0.0f, true);
-                //break;
             }
             else if (numPlayedSamples > playingSound->durationParam)
             {
@@ -222,6 +220,7 @@ double GrainVoice::getPosition()
 
 double GrainVoice::setStartPosition(GrainSound* sound, int midiNoteNumber)
 {
+    envCurve.resetIndex();
     auto position = std::fmod((sound->positionParam +  (float(midiNoteNumber % sound->numOfKeysAvailable) / float(sound->numOfKeysAvailable) * sound->length) * sound->spreadParam), sound->length);
     return position;
 }

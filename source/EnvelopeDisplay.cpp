@@ -15,7 +15,7 @@
 EnvelopeDisplay::EnvelopeDisplay() : envCurve()
 {
 
-    envCurve.setFrequency(8, 44100);
+    envCurve.setFrequency(2, 44100);
     startTimer(40);
 
 }

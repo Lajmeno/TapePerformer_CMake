@@ -95,6 +95,11 @@ public:
 
         samples[tableSize] = samples[0];
     }
+
+    void resetIndex()
+    {
+        currentIndex = 0.0f;
+    }
     
     juce::AudioSampleBuffer getWavetable (){
         return wavetable;
