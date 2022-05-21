@@ -317,7 +317,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout TapePerformerAudioProcessor:
     
     params.add(std::make_unique<juce::AudioParameterFloat>("gain", "Gain", 0.0f, 1.0f, 0.7f));
     
-    params.add(std::make_unique<juce::AudioParameterFloat>("envShape", "Shape", 0.0f, 1.0f, 0.0f));
+    params.add(std::make_unique<juce::AudioParameterFloat>("envShape", "Shape", juce::NormalisableRange<float>(0.f, 1.f, 0.001f, 1.f), 0.0f));
         
     return params;
 

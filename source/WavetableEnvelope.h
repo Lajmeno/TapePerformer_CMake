@@ -75,22 +75,21 @@ public:
         wavetable.setSize (1, (int) tableSize + 1);
         auto* samples = wavetable.getWritePointer (0);
 
-        float envShapeParam = envelopeShape * 6.8f;
+        float envShapeParam = envelopeShape * 10.0f + 0.9f;
 
-        //auto angleDelta = juce::MathConstants<double>::twoPi / (double) (tableSize - 1);
-        //auto currentAngle = 0.0;
+        auto angleDelta = juce::MathConstants<double>::pi / (double) (tableSize - 1);
+        auto currentAngle = 0.0;
 
         for (unsigned int i = 0; i < tableSize; ++i)
         {
-
+            /*
             float x = (i - 1024.0f) / 512.0f ;
             float sample = std::tanh(std::exp(-x*x) * envShapeParam);
             samples[i] = std::min(sample * envShapeParam, 1.0f);
-            /*
+            */
             auto sample = std::sin (currentAngle);
             samples[i] = std::min((float) sample * envShapeParam, 1.0f);
             currentAngle += angleDelta;
-             */
         }
 
         samples[tableSize] = samples[0];
