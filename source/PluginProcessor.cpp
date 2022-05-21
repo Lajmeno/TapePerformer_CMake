@@ -271,7 +271,7 @@ void TapePerformerAudioProcessor::loadFile()
                 
                 juce::BigInteger range;
                 range.setRange(0, 127, true);
-                mSampler.addSound(new GrainSound("Sample", *mFormatReader, range, midiNoteForNormalPitch, 0.05f, 0.1f, 180));
+                mSampler.addSound(new GrainSound("Sample", *mFormatReader, range, midiNoteForNormalPitch, 0.0f, 0.01f, 180));
             }
         }
     });
@@ -288,7 +288,7 @@ void TapePerformerAudioProcessor::loadFile(const juce::String &path)
     juce::BigInteger range;
     range.setRange(0, 127, true);
     
-    mSampler.addSound(new GrainSound("Sample", *mFormatReader, range, midiNoteForNormalPitch, 0.05f, 0.1f, 180));
+    mSampler.addSound(new GrainSound("Sample", *mFormatReader, range, midiNoteForNormalPitch, 0.0f, 0.01f, 180));
     
 //    wavePlayPosition = 0;
 }

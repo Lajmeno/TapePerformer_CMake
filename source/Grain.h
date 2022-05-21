@@ -33,7 +33,7 @@ public:
     bool appliesToChannel (int midiChannel) override;
     
     int getNumOfKeysAvailable() { return numOfKeysAvailable; }
-    long getDurationParam() { return durationParam; }
+    double getDurationParam() { return durationParam; }
     double getPositionsParam() { return positionParam; }
     float getSpreadParam() { return spreadParam; }
     
@@ -57,7 +57,7 @@ private:
     bool pitchModeParam = false;
     double positionParam = 11025;
     float transpositionParam = 60.0f;   //midiRoot
-    long durationParam = 36075;
+    double durationParam = 36075;
     int numOfKeysAvailable = 12;
     float spreadParam = 0.2f;
     
@@ -95,6 +95,8 @@ public:
     
     void createWavetableEnv();
 
+    void setEnvelopeFrequency();
+
     
     
 private:
@@ -108,6 +110,8 @@ private:
     double sourceSamplePosition = 0;
     double numPlayedSamples = 0;
     float lgain = 0, rgain = 0;
+
+    double segmentDuration= 0.0f;
     
 
     float envShapeValue = 1.0f;
