@@ -100,6 +100,7 @@ void GrainVoice::startNote (int midiNoteNumber, float velocity, juce::Synthesise
             pitchRatio = std::pow (2.0, (midiNoteNumber - sound->midiRootNote) / 12.0) * sound->sourceSampleRate / getSampleRate();
             
             sourceSamplePosition = sound->positionParam;
+            setEnvelopeFrequency(sound);
             envCurve.resetIndex();
         }
         else
@@ -120,9 +121,6 @@ void GrainVoice::startNote (int midiNoteNumber, float velocity, juce::Synthesise
         adsr.setParameters (sound->params);
 
         adsr.noteOn();
-
-        segmentDuration = sound->getDurationParam();
-        setEnvelopeFrequency();
     }
     else
     {
@@ -190,25 +188,21 @@ void GrainVoice::renderNextBlock (juce::AudioBuffer<float>& outputBuffer, int st
             
             numPlayedSamples += pitchRatio;
 
-            if(segmentDuration != playingSound->durationParam)
-            {
-                segmentDuration = playingSound->durationParam;
-                //setEnvelopeFrequency();
-            }
-            
             if (!isKeyDown())
             {
                 //need to make this only be called once (maybe once a block) - at the moment it is called for every sample in the block
                 stopNote (0.0f, true);
             }
-            else if (numPlayedSamples > segmentDuration)
+            else if (numPlayedSamples > playingSound->durationParam)
             {
                 numPlayedSamples = 0;
                 if(!playingSound->pitchModeParam)
+                {
                     sourceSamplePosition = setStartPosition(playingSound, currentMiniNumber);
+                }
                 else
                 {
-                    setEnvelopeFrequency();
+                    setEnvelopeFrequency(playingSound);
                     envCurve.resetIndex();
                     sourceSamplePosition = startPosition;
                 }
@@ -231,14 +225,14 @@ double GrainVoice::getPosition()
 double GrainVoice::setStartPosition(GrainSound* sound, int midiNoteNumber)
 {
     envCurve.resetIndex();
-    setEnvelopeFrequency();
+    setEnvelopeFrequency(sound);
     auto position = std::fmod((sound->positionParam +  (float(midiNoteNumber % sound->numOfKeysAvailable) / float(sound->numOfKeysAvailable) * sound->length) * sound->spreadParam), sound->length);
     return position;
 }
 
-void GrainVoice::setEnvelopeFrequency()
+void GrainVoice::setEnvelopeFrequency(GrainSound* sound)
 {
-    auto frequency = 1 / ( (segmentDuration / pitchRatio) / getSampleRate());
+    auto frequency = 1 / ( (sound->durationParam / pitchRatio) / getSampleRate());
     envCurve.setFrequency ((float) frequency, getSampleRate());
 }
 

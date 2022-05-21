@@ -89,13 +89,14 @@ public:
     using juce::SynthesiserVoice::renderNextBlock;
     
     double setStartPosition(GrainSound* sound, int midiNoteNumber);
+    void setEnvelopeFrequency(GrainSound* sound);
     
     
     double getPosition();
     
     void createWavetableEnv();
 
-    void setEnvelopeFrequency();
+
 
     
     
@@ -110,9 +111,6 @@ private:
     double sourceSamplePosition = 0;
     double numPlayedSamples = 0;
     float lgain = 0, rgain = 0;
-
-    double segmentDuration= 0.0f;
-    
 
     float envShapeValue = 1.0f;
     
