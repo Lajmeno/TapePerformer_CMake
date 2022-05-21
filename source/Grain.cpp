@@ -62,8 +62,8 @@ void GrainSound::updateParams(float mode, float availableKeys, double position, 
     // change here to a state that won't increase much if a sample is very long
 //    auto lengthInSeconds = length / sourceSampleRate;
 //    lengthInSeconds > 3 ? durationParam = duration * ( 2.5 * sourceSampleRate) : durationParam = duration * length;
-    durationParam = duration * length;
-    
+    durationParam = std::max(duration * length, 40.0);
+
     spreadParam = spread;
     
 }
@@ -100,6 +100,8 @@ void GrainVoice::startNote (int midiNoteNumber, float velocity, juce::Synthesise
             pitchRatio = std::pow (2.0, (midiNoteNumber - sound->midiRootNote) / 12.0) * sound->sourceSampleRate / getSampleRate();
             
             sourceSamplePosition = sound->positionParam;
+            setEnvelopeFrequency(sound);
+            envCurve.resetIndex();
         }
         else
         {
@@ -119,10 +121,6 @@ void GrainVoice::startNote (int midiNoteNumber, float velocity, juce::Synthesise
         adsr.setParameters (sound->params);
 
         adsr.noteOn();
-        
-
-        auto frequency = 1 / (sound->getDurationParam() / getSampleRate());
-        envCurve.setFrequency ((float) frequency, getSampleRate());
     }
     else
     {
@@ -130,7 +128,7 @@ void GrainVoice::startNote (int midiNoteNumber, float velocity, juce::Synthesise
     }
 }
 
-void GrainVoice::stopNote (float velocity, bool allowTailOff)
+void GrainVoice::stopNote (float /*velocity*/, bool allowTailOff)
 {
     if (allowTailOff)
     {
@@ -189,7 +187,7 @@ void GrainVoice::renderNextBlock (juce::AudioBuffer<float>& outputBuffer, int st
             sourceSamplePosition = std::fmod(sourceSamplePosition, playingSound->length);
             
             numPlayedSamples += pitchRatio;
-            
+
             if (!isKeyDown())
             {
                 //need to make this only be called once (maybe once a block) - at the moment it is called for every sample in the block
@@ -199,9 +197,15 @@ void GrainVoice::renderNextBlock (juce::AudioBuffer<float>& outputBuffer, int st
             {
                 numPlayedSamples = 0;
                 if(!playingSound->pitchModeParam)
+                {
                     sourceSamplePosition = setStartPosition(playingSound, currentMiniNumber);
+                }
                 else
+                {
+                    setEnvelopeFrequency(playingSound);
+                    envCurve.resetIndex();
                     sourceSamplePosition = startPosition;
+                }
             }
 
         }
@@ -221,8 +225,15 @@ double GrainVoice::getPosition()
 double GrainVoice::setStartPosition(GrainSound* sound, int midiNoteNumber)
 {
     envCurve.resetIndex();
+    setEnvelopeFrequency(sound);
     auto position = std::fmod((sound->positionParam +  (float(midiNoteNumber % sound->numOfKeysAvailable) / float(sound->numOfKeysAvailable) * sound->length) * sound->spreadParam), sound->length);
     return position;
+}
+
+void GrainVoice::setEnvelopeFrequency(GrainSound* sound)
+{
+    auto frequency = 1 / ( (sound->durationParam / pitchRatio) / getSampleRate());
+    envCurve.setFrequency ((float) frequency, getSampleRate());
 }
 
 
