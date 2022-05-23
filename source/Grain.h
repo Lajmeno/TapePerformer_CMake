@@ -88,7 +88,7 @@ public:
     void renderNextBlock (juce::AudioBuffer<float>&, int startSample, int numSamples) override;
     using juce::SynthesiserVoice::renderNextBlock;
     
-    double setStartPosition(GrainSound* sound, int midiNoteNumber);
+    double setStartPosition(GrainSound* sound);
     void setEnvelopeFrequency(GrainSound* sound);
     
     
@@ -105,23 +105,22 @@ private:
     bool keyIsDown = false;
     
     double startPosition = 0;
-    int currentMiniNumber = 0;
+    int currentMidiNumber = 0;
+    int fluxMode = 2;
     
     double pitchRatio = 0;
     double sourceSamplePosition = 0;
     double numPlayedSamples = 0;
     float lgain = 0, rgain = 0;
 
-    float envShapeValue = 1.0f;
+    //needs to be over the actual range - value of 1.0f will throw error when envShape value is really one
+    float envShapeValue = 2.0f;
     
     
 
     juce::ADSR adsr;
     
     WavetableEnvelope envCurve;
-//    juce::AudioSampleBuffer envTable;
-    
-    
     
 //    JUCE_LEAK_DETECTOR (GrainVoice)
 };

@@ -85,14 +85,14 @@ bool GrainVoice::canPlaySound (juce::SynthesiserSound* sound)
 
 void GrainVoice::startNote (int midiNoteNumber, float velocity, juce::SynthesiserSound* s, int /*currentPitchWheelPosition*/)
 {
-    if(envShapeValue != WavetableEnvelope::envelopeShape) {
+   if(envShapeValue != WavetableEnvelope::envelopeShape) {
         envCurve.createWavetableEnv();
         envShapeValue = WavetableEnvelope::envelopeShape;
     }
 
     if (auto* sound = dynamic_cast< GrainSound*> (s)) //deleted const before GrainSound* to make set startPosition work
     {
-        currentMiniNumber = midiNoteNumber;
+        currentMidiNumber = midiNoteNumber;
         
         if(sound->pitchModeParam)
         {
@@ -108,7 +108,7 @@ void GrainVoice::startNote (int midiNoteNumber, float velocity, juce::Synthesise
             pitchRatio = std::pow (2.0, (sound->transpositionParam - sound->midiRootNote) / 12.0) * sound->sourceSampleRate / getSampleRate();
             
 //            sourceSamplePosition = std::fmod((sound->positionParam +  (float(midiNoteNumber % sound->numOfKeysAvailable) / float(sound->numOfKeysAvailable) * sound->length) * sound->spreadParam), sound->length);
-            sourceSamplePosition = setStartPosition(sound, midiNoteNumber);
+            sourceSamplePosition = setStartPosition(sound);
             
         }
         startPosition = sourceSamplePosition;
@@ -196,18 +196,8 @@ void GrainVoice::renderNextBlock (juce::AudioBuffer<float>& outputBuffer, int st
             else if (numPlayedSamples > playingSound->durationParam)
             {
                 numPlayedSamples = 0;
-                if(!playingSound->pitchModeParam)
-                {
-                    sourceSamplePosition = setStartPosition(playingSound, currentMiniNumber);
-                }
-                else
-                {
-                    setEnvelopeFrequency(playingSound);
-                    envCurve.resetIndex();
-                    sourceSamplePosition = startPosition;
-                }
+                sourceSamplePosition = setStartPosition(playingSound);
             }
-
         }
     }
     
@@ -222,11 +212,37 @@ double GrainVoice::getPosition()
     return position;
 }
 
-double GrainVoice::setStartPosition(GrainSound* sound, int midiNoteNumber)
+double GrainVoice::setStartPosition(GrainSound* sound)
 {
     envCurve.resetIndex();
     setEnvelopeFrequency(sound);
-    auto position = std::fmod((sound->positionParam +  (float(midiNoteNumber % sound->numOfKeysAvailable) / float(sound->numOfKeysAvailable) * sound->length) * sound->spreadParam), sound->length);
+    switch (fluxMode)
+    {
+        case 1 :
+            currentMidiNumber = std::fmod(currentMidiNumber + 1.0f, sound->midiRootNote + sound->numOfKeysAvailable );
+            break;
+        case 2 :
+            currentMidiNumber = std::fmod(currentMidiNumber - 1, sound->midiRootNote);
+            break;
+        case 3 :
+            currentMidiNumber = std::fmod(currentMidiNumber - 1, sound->midiRootNote + sound->numOfKeysAvailable );
+            break;
+
+    }
+    double position;
+    if(!sound->pitchModeParam)
+    {
+       position = std::fmod((sound->positionParam +  (float(currentMidiNumber % sound->numOfKeysAvailable) / float(sound->numOfKeysAvailable) * sound->length) * sound->spreadParam), sound->length);
+
+    }
+    else
+    {
+        setEnvelopeFrequency(sound);
+        envCurve.resetIndex();
+        //sourceSamplePosition = startPosition;
+        position = std::fmod((sound->positionParam +  (float(startPosition + 1 % sound->numOfKeysAvailable) / float(sound->numOfKeysAvailable) * sound->length) * sound->spreadParam), sound->length);
+
+    }
     return position;
 }
 

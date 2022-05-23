@@ -75,7 +75,7 @@ public:
         wavetable.setSize (1, (int) tableSize + 1);
         auto* samples = wavetable.getWritePointer (0);
 
-        float envShapeParam = envelopeShape * 10.0f + 0.9f;
+        float envShapeParam = envelopeShape * 9.0f + 0.9f;
 
         auto angleDelta = juce::MathConstants<double>::pi / (double) (tableSize - 1);
         auto currentAngle = 0.0;
