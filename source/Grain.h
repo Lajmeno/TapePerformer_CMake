@@ -106,7 +106,7 @@ private:
     
     double startPosition = 0;
     int currentMidiNumber = 0;
-    int fluxMode = 1;
+    int fluxMode = 3;
     int numToChange = 0;
     
     double pitchRatio = 0;
