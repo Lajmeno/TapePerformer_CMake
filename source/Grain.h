@@ -88,7 +88,7 @@ public:
     void renderNextBlock (juce::AudioBuffer<float>&, int startSample, int numSamples) override;
     using juce::SynthesiserVoice::renderNextBlock;
     
-    double setStartPosition(GrainSound* sound);
+    double setStartPosition(GrainSound* sound, bool newlyStarted);
     void setEnvelopeFrequency(GrainSound* sound);
     
     
@@ -106,7 +106,7 @@ private:
     
     double startPosition = 0;
     int currentMidiNumber = 0;
-    int fluxMode = 0;
+    int fluxMode = 1;
     int numToChange = 0;
     
     double pitchRatio = 0;

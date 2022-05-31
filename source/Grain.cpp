@@ -72,6 +72,8 @@ void GrainSound::updateParams(float mode, float availableKeys, double position, 
 GrainVoice::GrainVoice() : envCurve()  //: createWavetableEnv(), envCurve(envTable) {
 {
 
+    std::srand(time(NULL));
+
 //    envCurve = new WavetableEnvelope(envTable);
 //    envCurve.add(envCurves);
     
@@ -107,12 +109,11 @@ void GrainVoice::startNote (int midiNoteNumber, float velocity, juce::Synthesise
         else
         {
             pitchRatio = std::pow (2.0, (sound->transpositionParam - sound->midiRootNote) / 12.0) * sound->sourceSampleRate / getSampleRate();
-            
-//            sourceSamplePosition = std::fmod((sound->positionParam +  (float(midiNoteNumber % sound->numOfKeysAvailable) / float(sound->numOfKeysAvailable) * sound->length) * sound->spreadParam), sound->length);
-            sourceSamplePosition = setStartPosition(sound);
+
+            sourceSamplePosition = setStartPosition(sound, true);
             
         }
-        startPosition = sourceSamplePosition;
+        //startPosition = sourceSamplePosition;
 
         numPlayedSamples = 0;
         lgain = velocity;
@@ -200,7 +201,7 @@ void GrainVoice::renderNextBlock (juce::AudioBuffer<float>& outputBuffer, int st
             else if (numPlayedSamples > playingSound->durationParam)
             {
                 numPlayedSamples = 0;
-                sourceSamplePosition = setStartPosition(playingSound);
+                sourceSamplePosition = setStartPosition(playingSound, false);
             }
         }
     }
@@ -216,22 +217,37 @@ double GrainVoice::getPosition()
     return position;
 }
 
-double GrainVoice::setStartPosition(GrainSound* sound)
+double GrainVoice::setStartPosition(GrainSound* sound, bool newlyStarted)
 {
     envCurve.resetIndex();
     setEnvelopeFrequency(sound);
-    switch (fluxMode)
+    if(!newlyStarted)
     {
-        case 1 :
-            numToChange = (numToChange + 1) % sound->numOfKeysAvailable ;
-            break;
-        case 2 :
-            numToChange = (numToChange + 1) % sound->numOfKeysAvailable ;
-            break;
-        case 3 :
-            currentMidiNumber = std::fmod(currentMidiNumber - 1, sound->midiRootNote + sound->numOfKeysAvailable );
-            break;
+        switch (fluxMode)
+        {
+            case 1 :
+                numToChange = (numToChange + 1) % sound->numOfKeysAvailable ;
+                break;
+            case 2 :
+                numToChange = (numToChange + 1) % sound->numOfKeysAvailable ;
+                break;
+            case 3 :
+                if(numToChange <= 0)
+                {
+                    numToChange *= -1;
+                    numToChange = (numToChange + 1) % (sound->numOfKeysAvailable / 2);
+                }
+                else
+                {
+                    numToChange *= -1;
+                }
+                break;
+            case 4 :
+                numToChange = std::rand() % sound->numOfKeysAvailable;
 
+
+
+        }
     }
     double position;
     if(!sound->pitchModeParam)
@@ -245,14 +261,20 @@ double GrainVoice::setStartPosition(GrainSound* sound)
             position = std::fmod((sound->positionParam +  (float((currentMidiNumber + numToChange)   % sound->numOfKeysAvailable) / float(sound->numOfKeysAvailable) * sound->length) * sound->spreadParam), sound->length);
 
         }
-
     }
     else
     {
         setEnvelopeFrequency(sound);
         envCurve.resetIndex();
         //sourceSamplePosition = startPosition;
-        position = std::fmod((sound->positionParam +  (float((currentMidiNumber + numToChange) % sound->numOfKeysAvailable) / float(sound->numOfKeysAvailable) * sound->length) * sound->spreadParam), sound->length);
+        if(fluxMode == 2)
+        {
+            position = std::fmod((sound->positionParam +  (float((sound->midiRootNote - numToChange) % sound->numOfKeysAvailable) / float(sound->numOfKeysAvailable) * sound->length) * sound->spreadParam), sound->length);
+        }
+        else
+        {
+            position = std::fmod((sound->positionParam +  (float((sound->midiRootNote + numToChange) % sound->numOfKeysAvailable) / float(sound->numOfKeysAvailable) * sound->length) * sound->spreadParam), sound->length);
+        }
 
     }
     return position;

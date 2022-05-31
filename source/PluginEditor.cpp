@@ -134,5 +134,5 @@ void TapePerformerAudioProcessorEditor::updateToggleState (juce::Button* button,
     auto state = button->getToggleState();
     juce::String stateString = state ? "ON" : "OFF";
 
-    juce::Logger::outputDebugString (std::move(name) + " Button changed to " + stateString);
+    //juce::Logger::outputDebugString (std::move(name) + " Button changed to " + stateString);
 }
