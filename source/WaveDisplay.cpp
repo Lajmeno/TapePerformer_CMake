@@ -20,7 +20,7 @@ WaveDisplay::WaveDisplay(TapePerformerAudioProcessor& p) : audioProcessor(p)
     
 //    audioProcessor.thumbnail.addChangeListener(this);
     
-    startTimer(40);
+    startTimer(20);
 
 
 }
@@ -143,7 +143,7 @@ void WaveDisplay::paintIfFileLoaded (juce::Graphics& g, const juce::Rectangle<in
     if (auto sound = dynamic_cast<GrainSound*>(audioProcessor.mSampler.getSound(0).get()))
     {
         auto& numKeys = *audioProcessor.apvts.getRawParameterValue("numKeys");
-        auto numFragments = numKeys > 0 ?  12 : 24;
+        auto numFragments = numKeys > 0 ?  24 : 48;
         auto widthOfFragment = *audioProcessor.apvts.getRawParameterValue("duration") * audioLength;
         auto initialXPosition = *audioProcessor.apvts.getRawParameterValue("position") * audioLength;
         auto& spreadParam = *audioProcessor.apvts.getRawParameterValue("spread");
@@ -180,5 +180,5 @@ void WaveDisplay::paintIfNoFileLoaded (juce::Graphics& g, const juce::Rectangle<
     g.setColour (juce::Colours::black);
     g.fillRect (thumbnailBounds);
     g.setColour (juce::Colours::white);
-    g.drawFittedText ("Drag and Drop a File here!!!", thumbnailBounds, juce::Justification::centred, 1);
+    g.drawFittedText ("Drag and Drop a File here?", thumbnailBounds, juce::Justification::centred, 1);
 }

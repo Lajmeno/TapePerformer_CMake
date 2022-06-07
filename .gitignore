@@ -2,3 +2,5 @@ cmake-build-debug
 JUCE
 .idea
 .DS_Store
+build
+Builds

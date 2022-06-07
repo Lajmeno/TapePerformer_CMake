@@ -38,6 +38,12 @@ TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerfor
     setSliderParams(positionSlider);
     setSliderParams(durationSlider);
     setSliderParams(spreadSlider);
+
+    addAndMakeVisible (positionLabel);
+    positionLabel.setText ("Position", juce::dontSendNotification);
+    positionLabel.attachToComponent (&positionSlider, false);
+    positionLabel.setFont (juce::Font (16.0f, juce::Font::bold));
+    positionLabel.setJustificationType (juce::Justification::centred);
     
     gainSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 0);
@@ -46,8 +52,10 @@ TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerfor
     setSliderParams(envShapeSlider);
     
     
-    addAndMakeVisible (modeLabel);
+    //addAndMakeVisible (modeLabel);
 
+    addAndMakeVisible(posToggle);
+    
     addAndMakeVisible (positionButton);
     addAndMakeVisible (pitchButton);
     positionButton.onClick = [this] { updateToggleState (&positionButton,   "Position");   };
@@ -99,19 +107,25 @@ void TapePerformerAudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
     
+    auto extraSettings = parameterArea.removeFromLeft(juce::jmax (50, bounds.getWidth() / 6));
+    
     auto generalSettings = parameterArea.removeFromLeft(juce::jmax (40, bounds.getWidth() / 6));
     auto positionArea = parameterArea.removeFromLeft(juce::jmax (60, bounds.getWidth() / 4));
     auto durationArea = parameterArea.removeFromLeft(juce::jmax (60, bounds.getWidth() / 4));
     auto spreadArea = parameterArea.removeFromLeft(juce::jmax (60, bounds.getWidth() / 4));
     
-    modeLabel.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
-    positionButton.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
-    pitchButton.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
+    //modeLabel.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
     
+    posToggle.setBounds(extraSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
+    positionButton.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
+
+    pitchButton.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
+
     numKeysLabel.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
     lessKeysButton.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
     moreKeysButton.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
-    
+
+    positionLabel.setBounds(positionArea.removeFromTop(static_cast<int>(positionArea.getHeight() * 0.2)));
     positionSlider.setBounds(positionArea.removeFromTop(static_cast<int>(positionArea.getHeight() * 0.5)));
     durationSlider.setBounds(durationArea.removeFromTop(static_cast<int>(durationArea.getHeight() * 0.5)));
     spreadSlider.setBounds(spreadArea.removeFromTop(static_cast<int>(spreadArea.getHeight() * 0.5)));

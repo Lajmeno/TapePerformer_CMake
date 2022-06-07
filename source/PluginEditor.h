@@ -12,7 +12,7 @@
 #include "PluginProcessor.h"
 #include "WaveDisplay.h"
 #include "EnvelopeDisplay.h"
-
+#include "CustomToggleButton.h"
 //==============================================================================
 /**
 */
@@ -46,9 +46,11 @@ private:
     EnvelopeDisplay envDisplay;
     
     
-    juce::Label modeLabel         { {}, "Play Mode"};
+    //juce::Label modeLabel         { {}, "Play Mode"};
     juce::ToggleButton positionButton   { "Position" },
                        pitchButton { "Pitch" };
+    
+    CustomToggleButton posToggle;
 
     juce::Label numKeysLabel        { {}, "Fractions" };
     juce::ToggleButton lessKeysButton  { "12" },
@@ -60,6 +62,7 @@ private:
 //    juce::ComboBox keysAvailableSelector;
     
     juce::Slider positionSlider;
+    juce::Label positionLabel;
     juce::Slider durationSlider;
     juce::Slider spreadSlider;
     juce::Slider gainSlider;
