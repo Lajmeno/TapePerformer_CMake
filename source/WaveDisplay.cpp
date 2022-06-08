@@ -34,7 +34,7 @@ void WaveDisplay::paint (juce::Graphics& g)
     g.fillAll(juce::Colours::darkgrey);
             
     auto bounds = getLocalBounds();
-    auto waveFileArea = bounds.removeFromTop(bounds.getHeight()* 0.95);
+    auto waveFileArea = bounds.removeFromTop(bounds.getHeight());
     
     
     juce::Rectangle<int> thumbnailBounds (0, 0, waveFileArea.getWidth(), waveFileArea.getHeight());
@@ -98,10 +98,12 @@ void WaveDisplay::filesDropped(const juce::StringArray &files, int x, int y)
 void WaveDisplay::paintIfFileLoaded (juce::Graphics& g, const juce::Rectangle<int>& thumbnailBounds)
 {
     
-    g.setColour (juce::Colours::darkorange);
+    //g.setColour (juce::Colours::darkorange);
+    g.setColour (juce::Colour::fromString("#597ad4"));
     g.fillRect (thumbnailBounds);
 
-    g.setColour (juce::Colours::lightseagreen);
+    //g.setColour (juce::Colours::lightseagreen);
+    g.setColour (juce::Colour::fromString("#f9ce4d"));
     
 
     //make draw Wave only when new file is loaded ? or does it need to draw new when draw positio is drawn on top??

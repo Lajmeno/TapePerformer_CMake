@@ -85,8 +85,11 @@ TapePerformerAudioProcessorEditor::~TapePerformerAudioProcessorEditor()
 //==============================================================================
 void TapePerformerAudioProcessorEditor::paint (juce::Graphics& g)
 {
+    
+    auto bgHue = juce::Colour::fromString("#000000").getHue();
+    auto backgroundColour = juce::Colour(bgHue, 0.5f, .9f, 1.0f);
 
-    g.fillAll(juce::Colours::darkgrey);
+    g.fillAll(backgroundColour);
 
 
 }
@@ -107,7 +110,7 @@ void TapePerformerAudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
     
-    auto extraSettings = parameterArea.removeFromLeft(juce::jmax (50, bounds.getWidth() / 6));
+    auto extraSettings = parameterArea.removeFromLeft(juce::jmax (80, bounds.getWidth() / 6));
     
     auto generalSettings = parameterArea.removeFromLeft(juce::jmax (40, bounds.getWidth() / 6));
     auto positionArea = parameterArea.removeFromLeft(juce::jmax (60, bounds.getWidth() / 4));
@@ -116,7 +119,7 @@ void TapePerformerAudioProcessorEditor::resized()
     
     //modeLabel.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
     
-    posToggle.setBounds(extraSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
+    posToggle.setBounds(extraSettings.reduced(4).removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
     positionButton.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
 
     pitchButton.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
