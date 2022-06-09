@@ -46,8 +46,10 @@ private:
     EnvelopeDisplay envDisplay;
     
     
-    //juce::Label modeLabel         { {}, "Play Mode"};
+    juce::Label modeLabel         { {}, "Modes"};
     CustomToggleButton playModeToggle{"Position", "Pitch"};
+
+    CustomToggleButton playModeToggle2{"Single", "Sustain"};
 
     juce::Label numKeysLabel        { {}, "Fractions" };
     juce::ToggleButton lessKeysButton  { "12" },

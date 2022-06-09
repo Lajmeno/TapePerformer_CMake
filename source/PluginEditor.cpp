@@ -52,8 +52,12 @@ TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerfor
     setSliderParams(envShapeSlider);
     
     
-    //addAndMakeVisible (modeLabel);
+    addAndMakeVisible (modeLabel);
+    modeLabel.setFont (juce::Font (16.0f, juce::Font::bold));
+    modeLabel.setJustificationType (juce::Justification::centred);
+
     addAndMakeVisible(playModeToggle);
+    addAndMakeVisible(playModeToggle2);
     
     addAndMakeVisible (numKeysLabel);
 
@@ -113,16 +117,18 @@ void TapePerformerAudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
     
-    auto extraSettings = parameterArea.removeFromLeft(juce::jmax (80, bounds.getWidth() / 6));
+    auto extraSettings = parameterArea.removeFromLeft(juce::jmax (80, bounds.getWidth() / 6)).reduced(4);
     
     auto generalSettings = parameterArea.removeFromLeft(juce::jmax (40, bounds.getWidth() / 6));
     auto positionArea = parameterArea.removeFromLeft(juce::jmax (60, bounds.getWidth() / 4));
     auto durationArea = parameterArea.removeFromLeft(juce::jmax (60, bounds.getWidth() / 4));
     auto spreadArea = parameterArea.removeFromLeft(juce::jmax (60, bounds.getWidth() / 4));
     
-    //modeLabel.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
+    modeLabel.setBounds(extraSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 10)));
     
-    playModeToggle.setBounds(extraSettings.reduced(4).removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
+    playModeToggle.setBounds(extraSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 10)));
+    extraSettings.removeFromTop(juce::jmax (3, parameterArea.getHeight() / 16));
+    playModeToggle2.setBounds(extraSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 10)));
 
     numKeysLabel.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
     lessKeysButton.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
