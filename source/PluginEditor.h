@@ -49,8 +49,8 @@ private:
     //juce::Label modeLabel         { {}, "Play Mode"};
     juce::ToggleButton positionButton   { "Position" },
                        pitchButton { "Pitch" };
-    
-    CustomToggleButton posToggle;
+
+    CustomToggleButton posToggle{"Position", "Pitch"};
 
     juce::Label numKeysLabel        { {}, "Fractions" };
     juce::ToggleButton lessKeysButton  { "12" },

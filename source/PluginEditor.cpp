@@ -86,10 +86,22 @@ TapePerformerAudioProcessorEditor::~TapePerformerAudioProcessorEditor()
 void TapePerformerAudioProcessorEditor::paint (juce::Graphics& g)
 {
     
-    auto bgHue = juce::Colour::fromString("#000000").getHue();
-    auto backgroundColour = juce::Colour(bgHue, 0.5f, .9f, 1.0f);
+    auto bgHue = juce::Colour::fromString("#FFB830").getHue();
+    auto backgroundColour = juce::Colour(bgHue, 0.5f, .0f, 1.0f);
 
-    g.fillAll(backgroundColour);
+    g.fillAll(juce::Colour::fromString("#187498").brighter(.3f));
+
+    auto fullArea = getLocalBounds().toFloat();
+    auto waveDisplayBorder = fullArea.removeFromTop(static_cast<int>(fullArea.getHeight() * 0.5));
+    g.setColour(Colours::black);
+    g.drawRect(waveDisplayBorder, 3.0f);
+
+    auto gainAreaBorder = fullArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.09));
+    g.drawLine(gainAreaBorder.getX(), gainAreaBorder.getY() + gainAreaBorder.getBottom() * 0.05f, gainAreaBorder.getX(), gainAreaBorder.getBottom() * 0.95f, 1.5f);
+
+    auto waveAreaBorder = fullArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.2));
+    //g.drawRect(waveAreaBorder, 1.0f);
+
 
 
 }
@@ -103,7 +115,7 @@ void TapePerformerAudioProcessorEditor::resized()
     auto waveEnvArea = bounds.removeFromRight(static_cast<int>(bounds.getWidth() * 0.2));
     auto waveEnvParams = waveEnvArea.removeFromBottom(static_cast<int>(bounds.getHeight() * 0.3));
     
-    waveDisplay.setBounds(responseArea.reduced(4));
+    waveDisplay.setBounds(responseArea.reduced(3));
     envDisplay.setBounds(waveEnvArea.reduced(4));
 
     auto parameterArea = bounds;
