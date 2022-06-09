@@ -47,19 +47,12 @@ private:
     
     
     //juce::Label modeLabel         { {}, "Play Mode"};
-    juce::ToggleButton positionButton   { "Position" },
-                       pitchButton { "Pitch" };
-
-    CustomToggleButton posToggle{"Position", "Pitch"};
+    CustomToggleButton playModeToggle{"Position", "Pitch"};
 
     juce::Label numKeysLabel        { {}, "Fractions" };
     juce::ToggleButton lessKeysButton  { "12" },
                        moreKeysButton    { "24" };
-    
-    
-    
-//    juce::ComboBox modeSelector;
-//    juce::ComboBox keysAvailableSelector;
+
     
     juce::Slider positionSlider;
     juce::Label positionLabel;

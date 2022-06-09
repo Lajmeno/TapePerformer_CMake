@@ -24,7 +24,7 @@ TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerfor
     setSize (800, 300);
     
     
-    modeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "playMode", positionButton);
+    modeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "playMode", playModeToggle);
     
     keysAvailableAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "numKeys", lessKeysButton);
     
@@ -53,18 +53,7 @@ TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerfor
     
     
     //addAndMakeVisible (modeLabel);
-
-    addAndMakeVisible(posToggle);
-    
-    addAndMakeVisible (positionButton);
-    addAndMakeVisible (pitchButton);
-    positionButton.onClick = [this] { updateToggleState (&positionButton,   "Position");   };
-    pitchButton.onClick = [this] { updateToggleState (&pitchButton, "Pitch"); };
-    
-//    positionButton.setState(juce::Button::ButtonState(1));
-
-    positionButton.setRadioGroupId (ModeButtons);
-    pitchButton.setRadioGroupId (ModeButtons);
+    addAndMakeVisible(playModeToggle);
     
     addAndMakeVisible (numKeysLabel);
 
@@ -73,7 +62,7 @@ TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerfor
     lessKeysButton.onClick = [this] { updateToggleState (&lessKeysButton,   "12 Keys");   };
     moreKeysButton.onClick = [this] { updateToggleState (&moreKeysButton, "24 Keys"); };
 
-    lessKeysButton  .setRadioGroupId (KeysAvailableButtons);
+    lessKeysButton.setRadioGroupId (KeysAvailableButtons);
     moreKeysButton.setRadioGroupId (KeysAvailableButtons);
   
 }
@@ -92,15 +81,17 @@ void TapePerformerAudioProcessorEditor::paint (juce::Graphics& g)
     g.fillAll(juce::Colour::fromString("#187498").brighter(.3f));
 
     auto fullArea = getLocalBounds().toFloat();
-    auto waveDisplayBorder = fullArea.removeFromTop(static_cast<int>(fullArea.getHeight() * 0.5));
+    auto waveDisplayBorder = fullArea.removeFromTop(static_cast<int>(fullArea.getHeight() * 0.5f));
     g.setColour(Colours::black);
     g.drawRect(waveDisplayBorder, 3.0f);
+    g.drawRect(fullArea, 2.0f);
 
-    auto gainAreaBorder = fullArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.09));
-    g.drawLine(gainAreaBorder.getX(), gainAreaBorder.getY() + gainAreaBorder.getBottom() * 0.05f, gainAreaBorder.getX(), gainAreaBorder.getBottom() * 0.95f, 1.5f);
+    auto gainAreaBorder = fullArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.09f));
+    g.drawLine(gainAreaBorder.getX(), gainAreaBorder.getY() + gainAreaBorder.getBottom() * 0.05f, gainAreaBorder.getX(), gainAreaBorder.getBottom() * 0.95f, 1.25f);
 
-    auto waveAreaBorder = fullArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.2));
-    //g.drawRect(waveAreaBorder, 1.0f);
+    auto waveAreaBorder = fullArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.215f));
+    g.drawLine(waveAreaBorder.getX(), waveAreaBorder.getY() + waveAreaBorder.getBottom() * 0.05f, waveAreaBorder.getX(), waveAreaBorder.getBottom() * 0.95f, 1.25f);
+
 
 
 
@@ -131,10 +122,7 @@ void TapePerformerAudioProcessorEditor::resized()
     
     //modeLabel.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
     
-    posToggle.setBounds(extraSettings.reduced(4).removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
-    positionButton.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
-
-    pitchButton.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
+    playModeToggle.setBounds(extraSettings.reduced(4).removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
 
     numKeysLabel.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
     lessKeysButton.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
