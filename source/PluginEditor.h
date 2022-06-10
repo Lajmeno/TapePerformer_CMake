@@ -13,6 +13,7 @@
 #include "WaveDisplay.h"
 #include "EnvelopeDisplay.h"
 #include "CustomToggleButton.h"
+#include "CustomRotarySliderLook.h"
 //==============================================================================
 /**
 */
@@ -55,7 +56,7 @@ private:
     juce::ToggleButton lessKeysButton  { "12" },
                        moreKeysButton    { "24" };
 
-    
+    CustomRotarySliderLook rotarySliderLook;
     juce::Slider positionSlider;
     juce::Label positionLabel;
     juce::Slider durationSlider;
@@ -81,6 +82,7 @@ private:
     std::unique_ptr<SliderAttachment> envShapeAttachment;
     
     void setSliderParams(juce::Slider& slider);
+    void setRotarySliderParams(juce::Slider& slider);
     
     
 //    void timerCallback() override

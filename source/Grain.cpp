@@ -62,7 +62,9 @@ void GrainSound::updateParams(float mode, float availableKeys, double position, 
     // change here to a state that won't increase much if a sample is very long
 //    auto lengthInSeconds = length / sourceSampleRate;
 //    lengthInSeconds > 3 ? durationParam = duration * ( 2.5 * sourceSampleRate) : durationParam = duration * length;
-    duration *= 88200.0f / length;
+    if(length > 88200)
+        duration *= 88200.0f / length;
+
     durationParam = std::max(duration * length, 40.0);
 
     spreadParam = spread;
@@ -109,9 +111,6 @@ void GrainVoice::startNote (int midiNoteNumber, float velocity, juce::Synthesise
         numPlayedSamples = 0;
         lgain = velocity;
         rgain = velocity;
-
-
-
 
         adsr.setSampleRate (sound->sourceSampleRate);
         adsr.setParameters (sound->params);

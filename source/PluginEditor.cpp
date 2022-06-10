@@ -36,8 +36,8 @@ TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerfor
     envShapeAttachment = std::make_unique<SliderAttachment>(audioProcessor.apvts, "envShape", envShapeSlider);
     
     setSliderParams(positionSlider);
-    setSliderParams(durationSlider);
-    setSliderParams(spreadSlider);
+    setRotarySliderParams(durationSlider);
+    setRotarySliderParams(spreadSlider);
 
     addAndMakeVisible (positionLabel);
     positionLabel.setText ("Position", juce::dontSendNotification);
@@ -120,7 +120,7 @@ void TapePerformerAudioProcessorEditor::resized()
     auto extraSettings = parameterArea.removeFromLeft(juce::jmax (80, bounds.getWidth() / 6)).reduced(4);
     
     auto generalSettings = parameterArea.removeFromLeft(juce::jmax (40, bounds.getWidth() / 6));
-    auto positionArea = parameterArea.removeFromLeft(juce::jmax (60, bounds.getWidth() / 4));
+    auto paramArea = parameterArea.removeFromLeft(juce::jmax (100, bounds.getWidth() / 4));
     auto durationArea = parameterArea.removeFromLeft(juce::jmax (60, bounds.getWidth() / 4));
     auto spreadArea = parameterArea.removeFromLeft(juce::jmax (60, bounds.getWidth() / 4));
     
@@ -134,10 +134,10 @@ void TapePerformerAudioProcessorEditor::resized()
     lessKeysButton.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
     moreKeysButton.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
 
-    positionLabel.setBounds(positionArea.removeFromTop(static_cast<int>(positionArea.getHeight() * 0.2)));
-    positionSlider.setBounds(positionArea.removeFromTop(static_cast<int>(positionArea.getHeight() * 0.5)));
-    durationSlider.setBounds(durationArea.removeFromTop(static_cast<int>(durationArea.getHeight() * 0.5)));
-    spreadSlider.setBounds(spreadArea.removeFromTop(static_cast<int>(spreadArea.getHeight() * 0.5)));
+    positionLabel.setBounds(paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.1)));
+    positionSlider.setBounds(paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.4)));
+    durationSlider.setBounds(paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.5)));
+    spreadSlider.setBounds(paramArea.removeFromRight(static_cast<int>(paramArea.getWidth() * 0.5)));
     gainSlider.setBounds(gainArea);
     envShapeSlider.setBounds(waveEnvParams);
 
@@ -150,6 +150,15 @@ void TapePerformerAudioProcessorEditor::setSliderParams(juce::Slider& slider)
     slider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 0);
     addAndMakeVisible(slider);
     
+}
+
+void TapePerformerAudioProcessorEditor::setRotarySliderParams(juce::Slider& slider)
+{
+    slider.setLookAndFeel(&rotarySliderLook);
+    slider.setSliderStyle(juce::Slider::Rotary);
+    slider.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 0);
+    addAndMakeVisible(slider);
+
 }
 
 void TapePerformerAudioProcessorEditor::updateToggleState (juce::Button* button, juce::String name)
