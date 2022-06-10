@@ -53,7 +53,7 @@ TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerfor
     
     
     addAndMakeVisible (modeLabel);
-    modeLabel.setFont (juce::Font (16.0f, juce::Font::bold));
+    modeLabel.setFont (juce::Font (12.0f, juce::Font::bold));
     modeLabel.setJustificationType (juce::Justification::centred);
 
     addAndMakeVisible(playModeToggle);
@@ -126,9 +126,9 @@ void TapePerformerAudioProcessorEditor::resized()
     
     modeLabel.setBounds(extraSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 10)));
     
-    playModeToggle.setBounds(extraSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 10)));
+    playModeToggle.setBounds(extraSettings.removeFromTop(juce::jmax (16, parameterArea.getHeight() / 10)));
     extraSettings.removeFromTop(juce::jmax (3, parameterArea.getHeight() / 16));
-    playModeToggle2.setBounds(extraSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 10)));
+    playModeToggle2.setBounds(extraSettings.removeFromTop(juce::jmax (16, parameterArea.getHeight() / 10)));
 
     numKeysLabel.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
     lessKeysButton.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
