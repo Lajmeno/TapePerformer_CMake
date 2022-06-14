@@ -98,7 +98,7 @@ void WaveDisplay::paintIfFileLoaded (juce::Graphics& g, const juce::Rectangle<in
 {
 
 
-    g.setColour (juce::Colour::fromString("#36AE7C"));
+    g.setColour (juce::Colour::fromString("#36ae7c"));
     g.fillRect (thumbnailBounds);
 
     //g.setColour (juce::Colours::lightseagreen);

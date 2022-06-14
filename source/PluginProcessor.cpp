@@ -28,6 +28,10 @@ apvts (*this, nullptr, "PARAMETERS", createParameterLayout())
     
     modeParameter = apvts.getRawParameterValue ("playMode");
     availableKeysParameter = apvts.getRawParameterValue("numKeys");
+    firstFluxParameter = apvts.getRawParameterValue("firstFluxMode");
+    secondFluxParameter = apvts.getRawParameterValue("secondFluxMode");
+    thirdFluxParameter = apvts.getRawParameterValue("thirdFluxMode");
+    fourthFluxParameter = apvts.getRawParameterValue("fourthFluxMode");
     positionParameter = apvts.getRawParameterValue("position");
     durationParameter = apvts.getRawParameterValue("duration");
     spreadParameter = apvts.getRawParameterValue("spread");
@@ -36,25 +40,17 @@ apvts (*this, nullptr, "PARAMETERS", createParameterLayout())
     
     
     mFormatManager.registerBasicFormats();
-    
-    
-//    transportSource.addChangeListener (this);
+
     
     for (int i = 0; i < mNumVoices; i++)
     {
         mSampler.addVoice(new GrainVoice());
-//        wavePlayPosition = 0;
     }
-    
-//    wavePlayPosition.size()= mNumVoices;
-//    wavePlayPosition.resize(mNumVoices, 0);
-//    assert(wavePlayPosition);
 }
  
 TapePerformerAudioProcessor::~TapePerformerAudioProcessor()
 {
     mFormatReader = nullptr;
-//    wavePlayPosition = 0;
 }
 
 //==============================================================================
@@ -164,7 +160,7 @@ bool TapePerformerAudioProcessor::isBusesLayoutSupported (const BusesLayout& lay
 
 void TapePerformerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    juce::ScopedNoDenormals noDenormals;
+    //juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
@@ -307,8 +303,15 @@ juce::AudioProcessorValueTreeState::ParameterLayout TapePerformerAudioProcessor:
     params.add(std::make_unique<juce::AudioParameterChoice>("playMode", "Playing Mode", juce::StringArray("Position Mode", "Pitch Mode"), 1));
     
     params.add(std::make_unique<juce::AudioParameterChoice>("numKeys", "Keys Available", juce::StringArray("12 Keys", "24 keys"), 1));
-    
-    
+
+    params.add(std::make_unique<juce::AudioParameterBool>("firstFluxMode", "First Flux Mode", false));
+
+    params.add(std::make_unique<juce::AudioParameterBool>("secondFluxMode", "Second Flux Mode", false));
+
+    params.add(std::make_unique<juce::AudioParameterBool>("thirdFluxMode", "Third Flux Mode", false));
+
+    params.add(std::make_unique<juce::AudioParameterBool>("fourthFluxMode", "Fourth Flux Mode", false));
+
     params.add(std::make_unique<juce::AudioParameterFloat>("position", "SamplePosition", juce::NormalisableRange<float>(0.f, 1.f, 0.001f, 1.f), 0.25f));
     
     params.add(std::make_unique<juce::AudioParameterFloat>("duration", "Duration", juce::NormalisableRange<float>(0.f, 1.f, 0.001f, .4f), 0.15f));
@@ -323,5 +326,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout TapePerformerAudioProcessor:
 
 }
 
+//this initializes a static variable of WavetableEnvelope - needs to be done in a cpp file
+//this enables to use one global parameter for every instance of WavetableEnvelope - as the shape should be the same for every voice and for EnvelopeDisplay too
 float WavetableEnvelope::envelopeShape{1};
 

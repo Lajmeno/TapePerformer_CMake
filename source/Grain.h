@@ -60,8 +60,8 @@ private:
     double durationParam = 36075;
     int numOfKeysAvailable = 12;
     float spreadParam = 0.2f;
-    
-//    JUCE_LEAK_DETECTOR (GrainSound)
+
+    JUCE_LEAK_DETECTOR (GrainSound)
 };
 
 
@@ -123,7 +123,7 @@ private:
     
     WavetableEnvelope envCurve;
     
-//    JUCE_LEAK_DETECTOR (GrainVoice)
+    JUCE_LEAK_DETECTOR (GrainVoice)
 };
 
 
