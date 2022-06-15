@@ -37,7 +37,7 @@ public:
     double getPositionsParam() { return positionParam; }
     float getSpreadParam() { return spreadParam; }
     
-    void updateParams(float mode, float availableKeys, double position, double duration, float spread);
+    void updateParams(float mode, float availableKeys, double position, double duration, float spread, std::vector<float> fluxMode);
   
     
     
@@ -60,6 +60,8 @@ private:
     double durationParam = 36075;
     int numOfKeysAvailable = 12;
     float spreadParam = 0.2f;
+
+    int fluxModeParam = 0;
 
     JUCE_LEAK_DETECTOR (GrainSound)
 };

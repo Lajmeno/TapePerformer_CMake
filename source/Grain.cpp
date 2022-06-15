@@ -51,7 +51,7 @@ bool GrainSound::appliesToChannel (int /*midiChannel*/)
     return true;
 }
 
-void GrainSound::updateParams(float mode, float availableKeys, double position, double duration, float spread)
+void GrainSound::updateParams(float mode, float availableKeys, double position, double duration, float spread, std::vector<float> fluxMode)
 {
     pitchModeParam = mode >= 1;
     
@@ -68,6 +68,17 @@ void GrainSound::updateParams(float mode, float availableKeys, double position, 
     durationParam = std::max(duration * length, 40.0);
 
     spreadParam = spread;
+
+    int counter = 1;
+    fluxModeParam = 0;
+    for(auto mode : fluxMode)
+    {
+        if(mode > 0)
+        {
+            fluxModeParam = counter;
+        }
+        counter++;
+    }
     
 }
 
@@ -213,12 +224,9 @@ double GrainVoice::setStartPosition(GrainSound* sound, bool newlyStarted)
     setEnvelopeFrequency(sound);
     if(!newlyStarted)
     {
-        switch (fluxMode)
+        switch (sound->fluxModeParam)
         {
-            case 1 :
-                numToChange = (numToChange + 1) % sound->numOfKeysAvailable ;
-                break;
-            case 2 :
+            case 1 : case 2 :
                 numToChange = (numToChange + 1) % sound->numOfKeysAvailable ;
                 break;
             case 3 :
@@ -242,7 +250,7 @@ double GrainVoice::setStartPosition(GrainSound* sound, bool newlyStarted)
     double position;
     if(!sound->pitchModeParam)
     {
-        if(fluxMode == 2)
+        if(sound->fluxModeParam == 2)
         {
             position = std::fmod((sound->positionParam +  (float((currentMidiNumber - numToChange) % sound->numOfKeysAvailable) / float(sound->numOfKeysAvailable) * sound->length) * sound->spreadParam), sound->length);
         }
@@ -255,7 +263,7 @@ double GrainVoice::setStartPosition(GrainSound* sound, bool newlyStarted)
     {
         setEnvelopeFrequency(sound);
         envCurve.resetIndex();
-        if(fluxMode == 2)
+        if(sound->fluxModeParam == 2)
         {
             position = std::fmod((sound->positionParam +  (float((sound->midiRootNote - numToChange) % sound->numOfKeysAvailable) / float(sound->numOfKeysAvailable) * sound->length) * sound->spreadParam), sound->length);
         }

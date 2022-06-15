@@ -176,7 +176,8 @@ void TapePerformerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer
         auto& position = *apvts.getRawParameterValue("position");
         auto& duration = *apvts.getRawParameterValue("duration");
         auto& spread = *apvts.getRawParameterValue("spread");
-        sound->updateParams(mode, (int)availableKeys, (double)position, (double)duration, spread);
+        std::vector<float> fluxMode = {*apvts.getRawParameterValue("firstFluxMode"), *apvts.getRawParameterValue("secondFluxMode"), *apvts.getRawParameterValue("thirdFluxMode"), *apvts.getRawParameterValue("fourthFluxMode")};
+        sound->updateParams(mode, (int)availableKeys, (double)position, (double)duration, spread, fluxMode);
         
     }
     
