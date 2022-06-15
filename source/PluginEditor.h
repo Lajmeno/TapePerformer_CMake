@@ -13,7 +13,7 @@
 #include "WaveDisplay.h"
 #include "EnvelopeDisplay.h"
 #include "CustomToggleButton.h"
-#include "CustomRotarySliderLook.h"
+#include "CustomLookAndFeel.h"
 //==============================================================================
 /**
 */
@@ -63,7 +63,7 @@ private:
 
 
 
-    CustomRotarySliderLook customLookAndFeel;
+    CustomLookAndFeel customLookAndFeel;
     juce::Slider positionSlider;
     juce::Label positionLabel;
     juce::Slider durationSlider;

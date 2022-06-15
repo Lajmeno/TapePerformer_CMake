@@ -21,41 +21,16 @@
   ==============================================================================
 */
 
-/*******************************************************************************
- The block below describes the properties of this PIP. A PIP is a short snippet
- of code that can be read by the Projucer and used to generate a JUCE project.
-
- BEGIN_JUCE_PIP_METADATA
-
- name:             LookAndFeelCustomisationTutorial
- version:          3.0.0
- vendor:           JUCE
- website:          http://juce.com
- description:      Explores look and feel customisations.
-
- dependencies:     juce_core, juce_data_structures, juce_events, juce_graphics,
-                   juce_gui_basics
- exporters:        xcode_mac, vs2019, linux_make, xcode_iphone, androidstudio
-
- type:             Component
- mainClass:        MainContentComponent
-
- useLocalCopy:     1
-
- END_JUCE_PIP_METADATA
-
-*******************************************************************************/
-
 
 #pragma once
 
 #include <JuceHeader.h>
 
 //==============================================================================
-class CustomRotarySliderLook : public juce::LookAndFeel_V4
+class CustomLookAndFeel : public juce::LookAndFeel_V4
 {
 public:
-    CustomRotarySliderLook()
+    CustomLookAndFeel()
     {
         setColour (juce::Slider::thumbColourId, juce::Colours::red);
     }

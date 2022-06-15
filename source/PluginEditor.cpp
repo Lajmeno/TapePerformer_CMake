@@ -17,6 +17,8 @@ TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerfor
     : AudioProcessorEditor (&p), waveDisplay(p), audioProcessor (p)
 {
 
+    setLookAndFeel(&customLookAndFeel);
+
     addAndMakeVisible(waveDisplay);
     addAndMakeVisible(envDisplay);
     setResizable(true, true);
@@ -32,11 +34,6 @@ TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerfor
     secondFluxButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "secondFluxMode", secondFluxModeButton);
     thirdFluxButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "thirdFluxMode", thirdFluxModeButton);
     fourthFluxButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "fourthFluxMode", fourthFluxModeButton);
-
-
-
-
-
 
     positionAttachment = std::make_unique<SliderAttachment>(audioProcessor.apvts, "position", positionSlider);
     durationAttachment = std::make_unique<SliderAttachment>(audioProcessor.apvts, "duration", durationSlider);
@@ -88,6 +85,7 @@ TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerfor
 
 TapePerformerAudioProcessorEditor::~TapePerformerAudioProcessorEditor()
 {
+    setLookAndFeel (nullptr);
 }
 
 //==============================================================================
@@ -181,7 +179,6 @@ void TapePerformerAudioProcessorEditor::setSliderParams(juce::Slider& slider)
 
 void TapePerformerAudioProcessorEditor::setRotarySliderParams(juce::Slider& slider)
 {
-    slider.setLookAndFeel(&customLookAndFeel);
     slider.setSliderStyle(juce::Slider::Rotary);
     slider.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 0);
     addAndMakeVisible(slider);
@@ -190,7 +187,6 @@ void TapePerformerAudioProcessorEditor::setRotarySliderParams(juce::Slider& slid
 
 void TapePerformerAudioProcessorEditor::setTextButton(juce::Button& button, juce::String string)
 {
-    button.setLookAndFeel(&customLookAndFeel);
     button.setButtonText(string);
     button.setRadioGroupId(FluxModeButtons);
     addAndMakeVisible(button);
