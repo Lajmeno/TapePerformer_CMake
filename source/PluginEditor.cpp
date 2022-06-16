@@ -40,16 +40,11 @@ TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerfor
     spreadAttachment = std::make_unique<SliderAttachment>(audioProcessor.apvts, "spread", spreadSlider);
     gainAttachment = std::make_unique<SliderAttachment>(audioProcessor.apvts, "gain", gainSlider);
     envShapeAttachment = std::make_unique<SliderAttachment>(audioProcessor.apvts, "envShape", envShapeSlider);
-    
-    setSliderParams(positionSlider);
-    setRotarySliderParams(durationSlider);
-    setRotarySliderParams(spreadSlider);
 
-    addAndMakeVisible (positionLabel);
-    positionLabel.setText ("Position", juce::dontSendNotification);
-    positionLabel.attachToComponent (&positionSlider, false);
-    positionLabel.setFont (juce::Font (16.0f, juce::Font::bold));
-    positionLabel.setJustificationType (juce::Justification::centred);
+
+    setSliderParams(positionSlider, positionLabel, "Position");
+    setSliderParams(durationSlider, durationLabel, "Duration");
+    setSliderParams(spreadSlider, spreadLabel, "Spread");
     
     gainSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 0);
@@ -61,7 +56,10 @@ TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerfor
     setTextButton(fourthFluxModeButton, "Random");
 
 
-    setSliderParams(envShapeSlider);
+    //setSliderParams(envShapeSlider);
+    envShapeSlider.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
+    envShapeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 0);
+    addAndMakeVisible(envShapeSlider);
     
     
     addAndMakeVisible (modeLabel);
@@ -148,12 +146,26 @@ void TapePerformerAudioProcessorEditor::resized()
     lessKeysButton.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
     moreKeysButton.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
 
-    positionLabel.setBounds(paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.2f)));
-    positionSlider.setBounds(paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.4f)));
+    //positionLabel.setBounds(paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.2f)));
+    paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.1f));
+    auto positionParamBounds = paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.3f));
+    positionSlider.setBounds(positionParamBounds);
+    positionLabel.setBounds(positionParamBounds.removeFromTop(static_cast<int>(positionParamBounds.getHeight() * 0.3f)));
+
+    auto durationParamBounds = paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.428f));
+    durationSlider.setBounds(durationParamBounds);
+    durationLabel.setBounds(durationParamBounds.removeFromTop(static_cast<int>(durationParamBounds.getHeight() * 0.3f)));
+
+    auto spreadParamBounds = paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.75f));;
+    spreadSlider.setBounds(spreadParamBounds);
+    spreadLabel.setBounds(spreadParamBounds.removeFromTop(static_cast<int>(spreadParamBounds.getHeight() * 0.35f)));
+
+    /*
     paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.1f));
     durationSlider.setBounds(paramArea.removeFromLeft(static_cast<int>(paramArea.getWidth() * 0.3f)));
     spreadSlider.setBounds(paramArea);
     paramArea.removeFromBottom(static_cast<int>(paramArea.getHeight() * 0.2f));
+     */
 
     firstFluxModeButton.setBounds(fluxModeArea.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
     secondFluxModeButton.setBounds(fluxModeArea.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
@@ -167,8 +179,14 @@ void TapePerformerAudioProcessorEditor::resized()
 }
 
 
-void TapePerformerAudioProcessorEditor::setSliderParams(juce::Slider& slider)
+void TapePerformerAudioProcessorEditor::setSliderParams(juce::Slider& slider, juce::Label& label, juce::String name)
 {
+    addAndMakeVisible (label);
+    label.setText (name, juce::dontSendNotification);
+    //positionLabel.attachToComponent (&slider, false);
+    label.setFont (juce::Font (14.0f, juce::Font::bold));
+    label.setJustificationType (juce::Justification::centred);
+
     slider.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
     slider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 0);
     addAndMakeVisible(slider);
@@ -185,9 +203,9 @@ void TapePerformerAudioProcessorEditor::setRotarySliderParams(juce::Slider& slid
 
 }
 
-void TapePerformerAudioProcessorEditor::setTextButton(juce::Button& button, juce::String string)
+void TapePerformerAudioProcessorEditor::setTextButton(juce::Button& button, juce::String text)
 {
-    button.setButtonText(string);
+    button.setButtonText(text);
     button.setRadioGroupId(FluxModeButtons);
     addAndMakeVisible(button);
 

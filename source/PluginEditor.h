@@ -65,11 +65,14 @@ private:
 
     CustomLookAndFeel customLookAndFeel;
     juce::Slider positionSlider;
-    juce::Label positionLabel;
     juce::Slider durationSlider;
     juce::Slider spreadSlider;
     juce::Slider gainSlider;
     juce::Slider envShapeSlider;
+
+    juce::Label positionLabel;
+    juce::Label durationLabel;
+    juce::Label spreadLabel;
     
     
     using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
@@ -94,9 +97,9 @@ private:
     std::unique_ptr<SliderAttachment> gainAttachment;
     std::unique_ptr<SliderAttachment> envShapeAttachment;
     
-    void setSliderParams(juce::Slider& slider);
+    void setSliderParams(juce::Slider& slider, juce::Label& label, juce::String name);
     void setRotarySliderParams(juce::Slider& slider);
-    void setTextButton(juce::Button& button, juce::String string);
+    void setTextButton(juce::Button& button, juce::String text);
 
     
     TapePerformerAudioProcessor& audioProcessor;

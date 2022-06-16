@@ -126,7 +126,7 @@ public:
         else
         {
             g.setColour (slider.findColour (Slider::trackColourId)
-                                 .withMultipliedAlpha (slider.isEnabled() ? 1.0f : 0.3f));
+                                 .withMultipliedAlpha (slider.isEnabled() ? 0.5f : 0.3f));
 
             if (slider.isHorizontal())
             {
