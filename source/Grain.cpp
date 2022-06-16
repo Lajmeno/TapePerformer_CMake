@@ -242,9 +242,9 @@ double GrainVoice::setStartPosition(GrainSound* sound, bool newlyStarted)
                 break;
             case 4 :
                 numToChange = std::rand() % sound->numOfKeysAvailable;
-
-
-
+                break;
+            default:
+                numToChange = 0;
         }
     }
     double position;

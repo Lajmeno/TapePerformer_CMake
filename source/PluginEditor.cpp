@@ -134,7 +134,7 @@ void TapePerformerAudioProcessorEditor::resized()
     auto extraSettings = parameterArea.removeFromLeft(juce::jmax (80, bounds.getWidth() / 6)).reduced(4);
     
     auto generalSettings = parameterArea.removeFromLeft(juce::jmax (40, bounds.getWidth() / 6));
-    auto paramArea = parameterArea.removeFromLeft(juce::jmax (150, bounds.getWidth() / 4));
+    auto paramArea = parameterArea.removeFromLeft(juce::jmax (250, bounds.getWidth() / 4));
     //auto durationArea = parameterArea.removeFromLeft(juce::jmax (60, bounds.getWidth() / 4));
     //auto spreadArea = parameterArea.removeFromLeft(juce::jmax (60, bounds.getWidth() / 4));
     
