@@ -104,11 +104,12 @@ void TapePerformerAudioProcessorEditor::paint (juce::Graphics& g)
     auto gainAreaBorder = fullArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.09f));
     g.drawLine(gainAreaBorder.getX(), gainAreaBorder.getY() + gainAreaBorder.getBottom() * 0.05f, gainAreaBorder.getX(), gainAreaBorder.getBottom() * 0.95f, 1.25f);
 
-    auto waveAreaBorder = fullArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.215f));
-    g.drawLine(waveAreaBorder.getX(), waveAreaBorder.getY() + waveAreaBorder.getBottom() * 0.05f, waveAreaBorder.getX(), waveAreaBorder.getBottom() * 0.95f, 1.25f);
+    auto fluxAreaBorder = fullArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.215f)).reduced(6);;
+    //g.drawLine(waveAreaBorder.getX(), waveAreaBorder.getY() + waveAreaBorder.getBottom() * 0.05f, waveAreaBorder.getX(), waveAreaBorder.getBottom() * 0.95f, 1.25f);
+    g.drawRoundedRectangle(fluxAreaBorder, 8, 1.5f);
 
-
-
+    auto modeParamsArea = fullArea.removeFromLeft(juce::jmax(80.0f, fullArea.getWidth() / 6)).reduced(6);
+    g.drawRoundedRectangle(modeParamsArea, 8, 1.5f);
 
 }
 
@@ -129,7 +130,7 @@ void TapePerformerAudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
     
-    auto extraSettings = parameterArea.removeFromLeft(juce::jmax (80, bounds.getWidth() / 6)).reduced(4);
+    auto extraSettings = parameterArea.removeFromLeft(juce::jmax (80, bounds.getWidth() / 6)).reduced(8);
     
     auto generalSettings = parameterArea.removeFromLeft(juce::jmax (40, bounds.getWidth() / 6));
     auto paramArea = parameterArea.removeFromLeft(juce::jmax (250, bounds.getWidth() / 4));
@@ -160,12 +161,6 @@ void TapePerformerAudioProcessorEditor::resized()
     spreadSlider.setBounds(spreadParamBounds);
     spreadLabel.setBounds(spreadParamBounds.removeFromTop(static_cast<int>(spreadParamBounds.getHeight() * 0.35f)));
 
-    /*
-    paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.1f));
-    durationSlider.setBounds(paramArea.removeFromLeft(static_cast<int>(paramArea.getWidth() * 0.3f)));
-    spreadSlider.setBounds(paramArea);
-    paramArea.removeFromBottom(static_cast<int>(paramArea.getHeight() * 0.2f));
-     */
 
     firstFluxModeButton.setBounds(fluxModeArea.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
     secondFluxModeButton.setBounds(fluxModeArea.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));

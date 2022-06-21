@@ -29,22 +29,18 @@ void EnvelopeDisplay::paint (juce::Graphics& g)
 
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
     
-    auto bounds = getLocalBounds();
-    
-    //auto waveDisplayArea = bounds.removeFromTop(bounds.getHeight()* 0.75);
-    
-    
+    auto bounds = getLocalBounds().toFloat();
 
     g.setColour (juce::Colours::grey);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
 
     g.setColour (juce::Colours::white);
 
-    auto waveDrawArea = bounds.reduced(4);
-    drawWaveform(g, bounds);
+    g.drawRoundedRectangle(bounds, 4, 2.0f);
 
-    //g.fillRect (waveDrawArea);
-    
+    auto waveDrawArea = bounds.reduced(2);
+    drawWaveform(g, waveDrawArea);
+
 }
 
 void EnvelopeDisplay::resized()
@@ -55,7 +51,7 @@ void EnvelopeDisplay::resized()
 }
 
 
-void EnvelopeDisplay::drawWaveform(juce::Graphics& g, const juce::Rectangle<int>& waveDrawArea)
+void EnvelopeDisplay::drawWaveform(juce::Graphics& g, const juce::Rectangle<float>& waveDrawArea)
 {
     envCurve.createWavetableEnv();
     
@@ -63,7 +59,7 @@ void EnvelopeDisplay::drawWaveform(juce::Graphics& g, const juce::Rectangle<int>
     auto* samples = wavetable.getReadPointer(0);
     
     for (int i = 0; i < wavetable.getNumSamples(); i++){
-        g.drawVerticalLine((int)(((waveDrawArea.getWidth() - 4) / 2048.0f) * (i + 15)),
+        g.drawVerticalLine((int)(waveDrawArea.getX() + (waveDrawArea.getWidth() / 2048.0f) * i),
                            (waveDrawArea.getHeight() + 2) - samples[i] * waveDrawArea.getHeight(),
                            waveDrawArea.getHeight() - 2);
     }
