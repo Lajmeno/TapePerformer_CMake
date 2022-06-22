@@ -11,7 +11,7 @@
 class CustomToggleButton : public Button, Timer
 {
 public:
-    CustomToggleButton(const String &textL, const String &textR) : Button({}), textL(textL), textR(textR) { setClickingTogglesState(true); }
+    CustomToggleButton(const String &textLeft, const String &textRight) : Button({}), textL(textLeft), textR(textRight) { setClickingTogglesState(true); }
 
 private:
     void buttonStateChanged () override { startTimer(30); }

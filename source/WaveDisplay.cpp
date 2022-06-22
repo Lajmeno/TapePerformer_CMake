@@ -142,8 +142,7 @@ void WaveDisplay::paintIfFileLoaded (juce::Graphics& g, const juce::Rectangle<in
     
     if (auto sound = dynamic_cast<GrainSound*>(audioProcessor.mSampler.getSound(0).get()))
     {
-        auto& numKeys = *audioProcessor.apvts.getRawParameterValue("numKeys");
-        auto numFragments = numKeys > 0 ?  24 : 48;
+        auto numFragments = sound->getNumKeysAvailable();
         auto widthOfFragment = sound->getDurationParam() / audioProcessor.getSampleRate();
         auto initialXPosition = *audioProcessor.apvts.getRawParameterValue("position") * audioLength;
         auto& spreadParam = *audioProcessor.apvts.getRawParameterValue("spread");

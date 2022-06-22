@@ -27,9 +27,7 @@ TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerfor
     
     
     modeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "playMode", playModeToggle);
-    
-    keysAvailableAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "numKeys", lessKeysButton);
-
+    keysAvailableAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(audioProcessor.apvts, "numKeys", numKeysMenu);
     firstFluxButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "firstFluxMode", firstFluxModeButton);
     secondFluxButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "secondFluxMode", secondFluxModeButton);
     thirdFluxButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "thirdFluxMode", thirdFluxModeButton);
@@ -63,22 +61,26 @@ TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerfor
     
     
     addAndMakeVisible (modeLabel);
-    modeLabel.setFont (juce::Font (12.0f, juce::Font::bold));
+    modeLabel.setFont (textFont);
     modeLabel.setJustificationType (juce::Justification::centred);
 
     addAndMakeVisible(playModeToggle);
     addAndMakeVisible(playModeToggle2);
-    
+
+
+    numKeysLabel.setFont(textFont);
+    numKeysLabel.setJustificationType (juce::Justification::centred);
     addAndMakeVisible (numKeysLabel);
 
-    addAndMakeVisible (lessKeysButton);
-    addAndMakeVisible (moreKeysButton);
-    lessKeysButton.onClick = [this] { updateToggleState (&lessKeysButton,   "12 Keys");   };
-    moreKeysButton.onClick = [this] { updateToggleState (&moreKeysButton, "24 Keys"); };
+    numKeysMenu.setJustificationType (juce::Justification::centred);
+    addAndMakeVisible (numKeysMenu);
+    numKeysMenu.addItem ("12",  1);
+    numKeysMenu.addItem ("24",   2);
+    numKeysMenu.addItem ("48", 3);
+    numKeysMenu.addItem ("96", 4);
 
-    lessKeysButton.setRadioGroupId (KeysAvailableButtons);
-    moreKeysButton.setRadioGroupId (KeysAvailableButtons);
-  
+    numKeysMenu.setSelectedId (1);
+
 }
 
 TapePerformerAudioProcessorEditor::~TapePerformerAudioProcessorEditor()
@@ -143,9 +145,8 @@ void TapePerformerAudioProcessorEditor::resized()
     extraSettings.removeFromTop(juce::jmax (3, parameterArea.getHeight() / 16));
     playModeToggle2.setBounds(extraSettings.removeFromTop(juce::jmax (16, parameterArea.getHeight() / 10)));
 
-    numKeysLabel.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
-    lessKeysButton.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
-    moreKeysButton.setBounds(generalSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
+    numKeysLabel.setBounds(extraSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
+    numKeysMenu.setBounds(extraSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
 
     //positionLabel.setBounds(paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.2f)));
     paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.1f));

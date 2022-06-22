@@ -303,7 +303,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout TapePerformerAudioProcessor:
     
     params.add(std::make_unique<juce::AudioParameterChoice>("playMode", "Playing Mode", juce::StringArray("Position Mode", "Pitch Mode"), 1));
     
-    params.add(std::make_unique<juce::AudioParameterChoice>("numKeys", "Keys Available", juce::StringArray("12 Keys", "24 keys"), 1));
+    params.add(std::make_unique<juce::AudioParameterChoice>("numKeys", "Keys Available", juce::StringArray("12 Keys", "24 Keys", "48 Keys", "96 Keys"), 0));
 
     params.add(std::make_unique<juce::AudioParameterBool>("firstFluxMode", "First Flux Mode", false));
 

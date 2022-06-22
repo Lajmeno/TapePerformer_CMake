@@ -52,9 +52,12 @@ private:
 
     CustomToggleButton playModeToggle2{"Single", "Sustain"};
 
+
+    juce::Font textFont   { 12.0f, juce::Font::bold};
+
+
     juce::Label numKeysLabel        { {}, "Fractions" };
-    juce::ToggleButton lessKeysButton  { "12" },
-                       moreKeysButton    { "24" };
+    juce::ComboBox numKeysMenu;
 
     juce::TextButton firstFluxModeButton;
     juce::TextButton secondFluxModeButton;
@@ -78,17 +81,12 @@ private:
     using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
     
     std::unique_ptr<ButtonAttachment> modeAttachment;
-    std::unique_ptr<ButtonAttachment> keysAvailableAttachment;
     std::unique_ptr<ButtonAttachment> firstFluxButtonAttachment;
     std::unique_ptr<ButtonAttachment> secondFluxButtonAttachment;
     std::unique_ptr<ButtonAttachment> thirdFluxButtonAttachment;
     std::unique_ptr<ButtonAttachment> fourthFluxButtonAttachment;
 
-
-
-//    using ComboBoxAttachment = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
-//    std::unique_ptr<ComboBoxAttachment> modeAttachment;
-//    std::unique_ptr<ComboBoxAttachment> keysAvailableAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> keysAvailableAttachment;
     
     using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
     std::unique_ptr<SliderAttachment> positionAttachment;

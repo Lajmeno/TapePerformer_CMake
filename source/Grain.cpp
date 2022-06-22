@@ -51,12 +51,24 @@ bool GrainSound::appliesToChannel (int /*midiChannel*/)
     return true;
 }
 
-void GrainSound::updateParams(float mode, float availableKeys, double position, double duration, float spread, std::vector<float> fluxMode)
+void GrainSound::updateParams(float mode, int availableKeys, double position, double duration, float spread, std::vector<float> fluxMode)
 {
     pitchModeParam = mode >= 1;
-    
-    numOfKeysAvailable = (availableKeys == 1) ? 24 : 48;
-    
+
+    switch (availableKeys) {
+        case 0 :
+            numOfKeysAvailable = 12;
+            break;
+        case 1 :
+            numOfKeysAvailable = 24;
+            break;
+        case 2 :
+            numOfKeysAvailable = 48;
+            break;
+        default :
+            numOfKeysAvailable = 96;
+    }
+
     positionParam = position * length;
     
     // change here to a state that won't increase much if a sample is very long

@@ -32,12 +32,12 @@ public:
     bool appliesToNote (int midiNoteNumber) override;
     bool appliesToChannel (int midiChannel) override;
     
-    int getNumOfKeysAvailable() { return numOfKeysAvailable; }
+    int getNumKeysAvailable() { return numOfKeysAvailable; }
     double getDurationParam() { return durationParam; }
     double getPositionsParam() { return positionParam; }
     float getSpreadParam() { return spreadParam; }
     
-    void updateParams(float mode, float availableKeys, double position, double duration, float spread, std::vector<float> fluxMode);
+    void updateParams(float mode, int availableKeys, double position, double duration, float spread, std::vector<float> fluxMode);
   
     
     
