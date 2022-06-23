@@ -31,11 +31,13 @@ class CustomLookAndFeel : public juce::LookAndFeel_V4 {
 public:
     CustomLookAndFeel() {
         setColour(juce::Slider::thumbColourId, juce::Colour::fromString("#EB5353"));
+        setColour(juce::Slider::rotarySliderFillColourId, juce::Colour::fromString("#EB5353"));
+
     }
 
     void drawRotarySlider(juce::Graphics &g, int x, int y, int width, int height, float sliderPos,
-                          const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider &) override {
-        auto radius = (float) juce::jmin(width / 2, height / 2) - 4.0f;
+                          const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider &slider) override {
+        auto radius =  (float) juce::jmin(width / 2.15f, height / 2.15f) - 4.0f;
         auto centreX = (float) x + (float) width * 0.5f;
         auto centreY = (float) y + (float) height * 0.5f;
         auto rx = centreX - radius;
@@ -44,12 +46,16 @@ public:
         auto angle = rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
 
         // fill
-        g.setColour(juce::Colours::orange);
+        g.setColour(slider.findColour(Slider::rotarySliderFillColourId));
         g.fillEllipse(rx, ry, rw, rw);
+
+        g.setColour(juce::Colours::black);
+        g.fillEllipse(centreX - 2.0f, y, radius * 0.125f, radius * 0.125f);
 
         // outline
         g.setColour(juce::Colours::red);
         g.drawEllipse(rx, ry, rw, rw, 1.0f);
+
 
         juce::Path p;
         auto pointerLength = radius * 0.33f;
@@ -58,7 +64,7 @@ public:
         p.applyTransform(juce::AffineTransform::rotation(angle).translated(centreX, centreY));
 
         // pointer
-        g.setColour(juce::Colours::yellow);
+        g.setColour(juce::Colours::white);
         g.fillPath(p);
     }
 

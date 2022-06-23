@@ -95,6 +95,7 @@ public:
     
     
     double getPosition();
+    int getCurrentMidiNumber() { return currentMidiNumber; }
     
     void createWavetableEnv();
 

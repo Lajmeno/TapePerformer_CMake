@@ -15,14 +15,9 @@
 WaveDisplay::WaveDisplay(TapePerformerAudioProcessor& p) : audioProcessor(p)
 {
     mLoadButton.onClick = [&]() { audioProcessor.loadFile(); };
-    //    audioProcessor.transportSource.addChangeListener (this);
     addAndMakeVisible(mLoadButton);
-    
-//    audioProcessor.thumbnail.addChangeListener(this);
-    
+
     startTimer(20);
-
-
 }
 
 WaveDisplay::~WaveDisplay()
@@ -124,7 +119,7 @@ void WaveDisplay::paintIfFileLoaded (juce::Graphics& g, const juce::Rectangle<in
             if (auto sound = dynamic_cast<GrainSound*>(audioProcessor.mSampler.getSound(0).get()))
             {
                 //get MidiNotenUmber that is trigerred if it is the root than draw red !!needs to be changed here!!!
-                if ( audioProcessor.midiNoteForNormalPitch == 61 )
+                if ( voice->getCurrentMidiNumber() == audioProcessor.midiNoteForNormalPitch )
                 {
                     g.setColour (juce::Colours::red);
                     g.drawLine (drawPosition, (float) thumbnailBounds.getY(), drawPosition, (float) thumbnailBounds.getBottom(), 1.5f);

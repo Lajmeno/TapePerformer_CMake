@@ -34,8 +34,7 @@ public:
     
     enum RadioButtonIds
     {
-        FluxModeButtons = 1001,
-        KeysAvailableButtons = 1002
+        FluxModeButtons = 1001
     };
     
 
@@ -72,10 +71,12 @@ private:
     juce::Slider spreadSlider;
     juce::Slider gainSlider;
     juce::Slider envShapeSlider;
+    juce::Slider transposeSlider;
 
     juce::Label positionLabel;
     juce::Label durationLabel;
     juce::Label spreadLabel;
+    juce::Label transposeLabel;
     
     
     using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
@@ -94,6 +95,7 @@ private:
     std::unique_ptr<SliderAttachment> spreadAttachment;
     std::unique_ptr<SliderAttachment> gainAttachment;
     std::unique_ptr<SliderAttachment> envShapeAttachment;
+    std::unique_ptr<SliderAttachment> transposeAttachment;
     
     void setSliderParams(juce::Slider& slider, juce::Label& label, juce::String name);
     void setRotarySliderParams(juce::Slider& slider);

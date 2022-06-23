@@ -66,10 +66,9 @@ public:
     juce::AudioThumbnail thumbnail;
     juce::Synthesiser mSampler;
 
-    int midiNoteForNormalPitch = 60;
     const int mNumVoices { 6 };
-    
-    
+    int midiNoteForNormalPitch = 60;
+
     
     juce::AudioProcessorValueTreeState apvts;
     
@@ -101,6 +100,7 @@ private:
     std::atomic<float>* spreadParameter = nullptr;
     std::atomic<float>* gainParameter  = nullptr;
     std::atomic<float>* envelopeShapeParameter  = nullptr;
+    std::atomic<float>* transposeParameter  = nullptr;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TapePerformerAudioProcessor)

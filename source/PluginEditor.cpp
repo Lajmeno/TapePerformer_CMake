@@ -38,6 +38,7 @@ TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerfor
     spreadAttachment = std::make_unique<SliderAttachment>(audioProcessor.apvts, "spread", spreadSlider);
     gainAttachment = std::make_unique<SliderAttachment>(audioProcessor.apvts, "gain", gainSlider);
     envShapeAttachment = std::make_unique<SliderAttachment>(audioProcessor.apvts, "envShape", envShapeSlider);
+    transposeAttachment = std::make_unique<SliderAttachment>(audioProcessor.apvts, "transpose", transposeSlider);
 
 
     setSliderParams(positionSlider, positionLabel, "Position");
@@ -80,6 +81,20 @@ TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerfor
     numKeysMenu.addItem ("96", 4);
 
     numKeysMenu.setSelectedId (1);
+
+    transposeSlider.setSliderStyle(juce::Slider::Rotary);
+    addAndMakeVisible (transposeSlider);
+    transposeSlider.setRange (-48, 48, 1);          // [1]
+    transposeSlider.setTextValueSuffix (" St");     // [2]
+    transposeSlider.onValueChange = [this] { transposeSlider.setValue (transposeSlider.getValue(), juce::dontSendNotification); };
+
+    transposeSlider.setValue (0);
+    transposeSlider.setTextBoxStyle (juce::Slider::TextBoxBelow, false, 160, transposeSlider.getTextBoxHeight());
+
+    addAndMakeVisible (transposeLabel);
+    transposeLabel.setFont (textFont);
+    transposeLabel.setJustificationType (juce::Justification::centred);
+    transposeLabel.setText("Transpose", juce::dontSendNotification);
 
 }
 
@@ -147,6 +162,9 @@ void TapePerformerAudioProcessorEditor::resized()
 
     numKeysLabel.setBounds(extraSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
     numKeysMenu.setBounds(extraSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
+
+    transposeLabel.setBounds(generalSettings.removeFromTop(juce::jmax (40, parameterArea.getHeight() / 4)));
+    transposeSlider.setBounds(generalSettings.removeFromTop(juce::jmax (40, parameterArea.getHeight() / 2)));
 
     //positionLabel.setBounds(paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.2f)));
     paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.1f));

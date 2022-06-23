@@ -37,6 +37,7 @@ apvts (*this, nullptr, "PARAMETERS", createParameterLayout())
     spreadParameter = apvts.getRawParameterValue("spread");
     gainParameter  = apvts.getRawParameterValue ("gain");
     envelopeShapeParameter = apvts.getRawParameterValue("envShape");
+    transposeParameter = apvts.getRawParameterValue("transpose");
     
     
     mFormatManager.registerBasicFormats();
@@ -178,6 +179,8 @@ void TapePerformerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer
         auto& spread = *apvts.getRawParameterValue("spread");
         std::vector<float> fluxMode = {*apvts.getRawParameterValue("firstFluxMode"), *apvts.getRawParameterValue("secondFluxMode"), *apvts.getRawParameterValue("thirdFluxMode"), *apvts.getRawParameterValue("fourthFluxMode")};
         sound->updateParams(mode, (int)availableKeys, (double)position, (double)duration, spread, fluxMode);
+
+        midiNoteForNormalPitch = 60 + *apvts.getRawParameterValue("transpose");
         
     }
     
@@ -240,7 +243,7 @@ void TapePerformerAudioProcessor::loadFile()
 {
     
     
-    //bug: when closing Filechooser without choosing a file - no file is load
+    //bug: when closing Filechooser without choosing a file - no file is loaded
     //need to keep the old file in that situation
     
     chooser = std::make_unique<juce::FileChooser> ("Select a Wave file shorter than 10 minutes to play...",
@@ -300,6 +303,8 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 juce::AudioProcessorValueTreeState::ParameterLayout TapePerformerAudioProcessor::createParameterLayout()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout params;
+
+    params.add(std::make_unique<juce::AudioParameterFloat>("transpose", "Transposition", juce::NormalisableRange<float>(-48, 48, 1, 1.f), 0));
     
     params.add(std::make_unique<juce::AudioParameterChoice>("playMode", "Playing Mode", juce::StringArray("Position Mode", "Pitch Mode"), 1));
     
