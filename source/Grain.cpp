@@ -51,7 +51,7 @@ bool GrainSound::appliesToChannel (int /*midiChannel*/)
     return true;
 }
 
-void GrainSound::updateParams(float mode, int availableKeys, double position, double duration, float spread, std::vector<float> fluxMode)
+void GrainSound::updateParams(float mode, int availableKeys, double position, double duration, float spread, std::vector<float> fluxMode, int rootNote)
 {
     pitchModeParam = mode >= 1;
 
@@ -91,6 +91,8 @@ void GrainSound::updateParams(float mode, int availableKeys, double position, do
         }
         counter++;
     }
+
+    transpositionParam = rootNote;
     
 }
 
@@ -119,17 +121,9 @@ void GrainVoice::startNote (int midiNoteNumber, float velocity, juce::Synthesise
     {
         currentMidiNumber = midiNoteNumber;
         numToChange = 0;
-        
-        if(sound->pitchModeParam)
-        {
-            pitchRatio = std::pow (2.0, (midiNoteNumber - sound->midiRootNote) / 12.0) * sound->sourceSampleRate / getSampleRate();
-            sourceSamplePosition = setStartPosition(sound, true);
-        }
-        else
-        {
-            pitchRatio = std::pow (2.0, (sound->transpositionParam - sound->midiRootNote) / 12.0) * sound->sourceSampleRate / getSampleRate();
-            sourceSamplePosition = setStartPosition(sound, true);
-        }
+
+        setPitchRatio(sound, currentMidiNumber);
+        sourceSamplePosition = setStartPosition(sound, true);
 
         numPlayedSamples = 0;
         lgain = velocity;
@@ -215,6 +209,7 @@ void GrainVoice::renderNextBlock (juce::AudioBuffer<float>& outputBuffer, int st
             {
                 numPlayedSamples = 0;
                 sourceSamplePosition = setStartPosition(playingSound, false);
+                setPitchRatio(playingSound, currentMidiNumber);
             }
         }
     }
@@ -287,6 +282,25 @@ double GrainVoice::setStartPosition(GrainSound* sound, bool newlyStarted)
     }
     return position;
 }
+
+
+void GrainVoice::setPitchRatio(GrainSound* sound, int midiNoteNumber)
+{
+    int midiNoteParam = 0;
+    if(sound->pitchModeParam)
+    {
+        midiNoteParam = (midiNoteNumber + (int) sound->transpositionParam) % 120;
+        if(midiNoteParam < 0)
+            midiNoteParam = 0;
+    }
+    else
+    {
+        midiNoteParam = 60 + (int) sound->transpositionParam;
+    }
+    pitchRatio = std::pow (2.0, (midiNoteParam - sound->midiRootNote) / 12.0) * sound->sourceSampleRate / getSampleRate();
+
+}
+
 
 void GrainVoice::setEnvelopeFrequency(GrainSound* sound)
 {

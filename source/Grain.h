@@ -37,8 +37,8 @@ public:
     double getPositionsParam() { return positionParam; }
     float getSpreadParam() { return spreadParam; }
     
-    void updateParams(float mode, int availableKeys, double position, double duration, float spread, std::vector<float> fluxMode);
-  
+    void updateParams(float mode, int availableKeys, double position, double duration, float spread, std::vector<float> fluxMode, int rootNote);
+
     
     
     
@@ -91,6 +91,7 @@ public:
     using juce::SynthesiserVoice::renderNextBlock;
     
     double setStartPosition(GrainSound* sound, bool newlyStarted);
+    void setPitchRatio(GrainSound* sound, int midiNoteNumber);
     void setEnvelopeFrequency(GrainSound* sound);
     
     
