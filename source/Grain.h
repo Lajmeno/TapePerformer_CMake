@@ -32,13 +32,13 @@ public:
     bool appliesToNote (int midiNoteNumber) override;
     bool appliesToChannel (int midiChannel) override;
     
-    int getNumOfKeysAvailable() { return numOfKeysAvailable; }
+    int getNumKeysAvailable() { return numOfKeysAvailable; }
     double getDurationParam() { return durationParam; }
     double getPositionsParam() { return positionParam; }
     float getSpreadParam() { return spreadParam; }
     
-    void updateParams(float mode, float availableKeys, double position, double duration, float spread);
-  
+    void updateParams(float mode, int availableKeys, double position, double duration, float spread, std::vector<float> fluxMode, int rootNote);
+
     
     
     
@@ -60,8 +60,10 @@ private:
     double durationParam = 36075;
     int numOfKeysAvailable = 12;
     float spreadParam = 0.2f;
-    
-//    JUCE_LEAK_DETECTOR (GrainSound)
+
+    int fluxModeParam = 0;
+
+    JUCE_LEAK_DETECTOR (GrainSound)
 };
 
 
@@ -89,10 +91,12 @@ public:
     using juce::SynthesiserVoice::renderNextBlock;
     
     double setStartPosition(GrainSound* sound, bool newlyStarted);
+    void setPitchRatio(GrainSound* sound, int midiNoteNumber);
     void setEnvelopeFrequency(GrainSound* sound);
     
     
     double getPosition();
+    int getCurrentMidiNumber() { return currentMidiNumber; }
     
     void createWavetableEnv();
 
@@ -106,7 +110,6 @@ private:
     
     double startPosition = 0;
     int currentMidiNumber = 0;
-    int fluxMode = 3;
     int numToChange = 0;
     
     double pitchRatio = 0;
@@ -123,7 +126,7 @@ private:
     
     WavetableEnvelope envCurve;
     
-//    JUCE_LEAK_DETECTOR (GrainVoice)
+    JUCE_LEAK_DETECTOR (GrainVoice)
 };
 
 

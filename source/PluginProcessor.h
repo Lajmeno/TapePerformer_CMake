@@ -66,10 +66,9 @@ public:
     juce::AudioThumbnail thumbnail;
     juce::Synthesiser mSampler;
 
-    int midiNoteForNormalPitch = 60;
     const int mNumVoices { 6 };
-    
-    
+    int midiNoteForNormalPitch = 60;
+
     
     juce::AudioProcessorValueTreeState apvts;
     
@@ -77,9 +76,9 @@ public:
     
 
 private:
-    
 
-    
+
+
     juce::AudioFormatManager mFormatManager;
     juce::AudioFormatReader* mFormatReader { nullptr };
     
@@ -92,11 +91,16 @@ private:
      
     std::atomic<float>* modeParameter = nullptr;
     std::atomic<float>* availableKeysParameter  = nullptr;
+    std::atomic<float>* firstFluxParameter  = nullptr;
+    std::atomic<float>* secondFluxParameter  = nullptr;
+    std::atomic<float>* thirdFluxParameter  = nullptr;
+    std::atomic<float>* fourthFluxParameter  = nullptr;
     std::atomic<float>* positionParameter = nullptr;
     std::atomic<float>* durationParameter  = nullptr;
     std::atomic<float>* spreadParameter = nullptr;
     std::atomic<float>* gainParameter  = nullptr;
     std::atomic<float>* envelopeShapeParameter  = nullptr;
+    std::atomic<float>* transposeParameter  = nullptr;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TapePerformerAudioProcessor)

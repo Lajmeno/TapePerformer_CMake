@@ -37,7 +37,7 @@ private:
             envShapeValue = WavetableEnvelope::envelopeShape;
         }
     }
-    void drawWaveform(juce::Graphics& g, const juce::Rectangle<int>& waveDisplayArea);
+    void drawWaveform(juce::Graphics& g, const juce::Rectangle<float>& waveDisplayArea);
 
     float envShapeValue = 1.0f;
     

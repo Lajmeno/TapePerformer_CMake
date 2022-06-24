@@ -51,20 +51,48 @@ bool GrainSound::appliesToChannel (int /*midiChannel*/)
     return true;
 }
 
-void GrainSound::updateParams(float mode, float availableKeys, double position, double duration, float spread)
+void GrainSound::updateParams(float mode, int availableKeys, double position, double duration, float spread, std::vector<float> fluxMode, int rootNote)
 {
-    pitchModeParam = mode < 1;
-    
-    numOfKeysAvailable = (availableKeys == 1) ? 24 : 48;
-    
+    pitchModeParam = mode >= 1;
+
+    switch (availableKeys) {
+        case 0 :
+            numOfKeysAvailable = 12;
+            break;
+        case 1 :
+            numOfKeysAvailable = 24;
+            break;
+        case 2 :
+            numOfKeysAvailable = 48;
+            break;
+        default :
+            numOfKeysAvailable = 96;
+    }
+
     positionParam = position * length;
     
     // change here to a state that won't increase much if a sample is very long
 //    auto lengthInSeconds = length / sourceSampleRate;
 //    lengthInSeconds > 3 ? durationParam = duration * ( 2.5 * sourceSampleRate) : durationParam = duration * length;
+    if(length > 88200)
+        duration *= 88200.0f / length;
+
     durationParam = std::max(duration * length, 40.0);
 
     spreadParam = spread;
+
+    int counter = 1;
+    fluxModeParam = 0;
+    for(auto mode : fluxMode)
+    {
+        if(mode > 0)
+        {
+            fluxModeParam = counter;
+        }
+        counter++;
+    }
+
+    transpositionParam = rootNote;
     
 }
 
@@ -93,24 +121,13 @@ void GrainVoice::startNote (int midiNoteNumber, float velocity, juce::Synthesise
     {
         currentMidiNumber = midiNoteNumber;
         numToChange = 0;
-        
-        if(sound->pitchModeParam)
-        {
-            pitchRatio = std::pow (2.0, (midiNoteNumber - sound->midiRootNote) / 12.0) * sound->sourceSampleRate / getSampleRate();
-            sourceSamplePosition = setStartPosition(sound, true);
-        }
-        else
-        {
-            pitchRatio = std::pow (2.0, (sound->transpositionParam - sound->midiRootNote) / 12.0) * sound->sourceSampleRate / getSampleRate();
-            sourceSamplePosition = setStartPosition(sound, true);
-        }
+
+        setPitchRatio(sound, currentMidiNumber);
+        sourceSamplePosition = setStartPosition(sound, true);
 
         numPlayedSamples = 0;
         lgain = velocity;
         rgain = velocity;
-
-
-
 
         adsr.setSampleRate (sound->sourceSampleRate);
         adsr.setParameters (sound->params);
@@ -192,6 +209,7 @@ void GrainVoice::renderNextBlock (juce::AudioBuffer<float>& outputBuffer, int st
             {
                 numPlayedSamples = 0;
                 sourceSamplePosition = setStartPosition(playingSound, false);
+                setPitchRatio(playingSound, currentMidiNumber);
             }
         }
     }
@@ -213,12 +231,9 @@ double GrainVoice::setStartPosition(GrainSound* sound, bool newlyStarted)
     setEnvelopeFrequency(sound);
     if(!newlyStarted)
     {
-        switch (fluxMode)
+        switch (sound->fluxModeParam)
         {
-            case 1 :
-                numToChange = (numToChange + 1) % sound->numOfKeysAvailable ;
-                break;
-            case 2 :
+            case 1 : case 2 :
                 numToChange = (numToChange + 1) % sound->numOfKeysAvailable ;
                 break;
             case 3 :
@@ -234,15 +249,15 @@ double GrainVoice::setStartPosition(GrainSound* sound, bool newlyStarted)
                 break;
             case 4 :
                 numToChange = std::rand() % sound->numOfKeysAvailable;
-
-
-
+                break;
+            default:
+                numToChange = 0;
         }
     }
     double position;
     if(!sound->pitchModeParam)
     {
-        if(fluxMode == 2)
+        if(sound->fluxModeParam == 2)
         {
             position = std::fmod((sound->positionParam +  (float((currentMidiNumber - numToChange) % sound->numOfKeysAvailable) / float(sound->numOfKeysAvailable) * sound->length) * sound->spreadParam), sound->length);
         }
@@ -255,7 +270,7 @@ double GrainVoice::setStartPosition(GrainSound* sound, bool newlyStarted)
     {
         setEnvelopeFrequency(sound);
         envCurve.resetIndex();
-        if(fluxMode == 2)
+        if(sound->fluxModeParam == 2)
         {
             position = std::fmod((sound->positionParam +  (float((sound->midiRootNote - numToChange) % sound->numOfKeysAvailable) / float(sound->numOfKeysAvailable) * sound->length) * sound->spreadParam), sound->length);
         }
@@ -267,6 +282,25 @@ double GrainVoice::setStartPosition(GrainSound* sound, bool newlyStarted)
     }
     return position;
 }
+
+
+void GrainVoice::setPitchRatio(GrainSound* sound, int midiNoteNumber)
+{
+    int midiNoteParam = 0;
+    if(sound->pitchModeParam)
+    {
+        midiNoteParam = (midiNoteNumber + (int) sound->transpositionParam) % 120;
+        if(midiNoteParam < 0)
+            midiNoteParam = 0;
+    }
+    else
+    {
+        midiNoteParam = 60 + (int) sound->transpositionParam;
+    }
+    pitchRatio = std::pow (2.0, (midiNoteParam - sound->midiRootNote) / 12.0) * sound->sourceSampleRate / getSampleRate();
+
+}
+
 
 void GrainVoice::setEnvelopeFrequency(GrainSound* sound)
 {

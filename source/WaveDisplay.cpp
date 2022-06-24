@@ -15,14 +15,9 @@
 WaveDisplay::WaveDisplay(TapePerformerAudioProcessor& p) : audioProcessor(p)
 {
     mLoadButton.onClick = [&]() { audioProcessor.loadFile(); };
-    //    audioProcessor.transportSource.addChangeListener (this);
     addAndMakeVisible(mLoadButton);
-    
-//    audioProcessor.thumbnail.addChangeListener(this);
-    
+
     startTimer(20);
-
-
 }
 
 WaveDisplay::~WaveDisplay()
@@ -34,20 +29,19 @@ void WaveDisplay::paint (juce::Graphics& g)
     g.fillAll(juce::Colours::darkgrey);
             
     auto bounds = getLocalBounds();
-    auto waveFileArea = bounds.removeFromTop(bounds.getHeight()* 0.95);
-    
-    
-    juce::Rectangle<int> thumbnailBounds (0, 0, waveFileArea.getWidth(), waveFileArea.getHeight());
-    
+    auto waveFileArea = bounds.removeFromTop(bounds.getHeight());
+
+    //juce::Rectangle<int> thumbnailBounds (0, 0, waveFileArea.getWidth(), waveFileArea.getHeight());
+
     
     
     if (audioProcessor.thumbnail.getNumChannels() == 0)
     {
-        paintIfNoFileLoaded (g, thumbnailBounds);
+        paintIfNoFileLoaded (g, waveFileArea);
     }
     else
     {
-        paintIfFileLoaded (g, thumbnailBounds);
+        paintIfFileLoaded (g, waveFileArea);
     }
     
     mLoadButton.setBounds(waveFileArea.getWidth() * 0.95, waveFileArea.getHeight() * 0.02, 40, 20);
@@ -97,15 +91,16 @@ void WaveDisplay::filesDropped(const juce::StringArray &files, int x, int y)
 
 void WaveDisplay::paintIfFileLoaded (juce::Graphics& g, const juce::Rectangle<int>& thumbnailBounds)
 {
-    
-    g.setColour (juce::Colours::darkorange);
+
+
+    g.setColour (juce::Colour::fromString("#36ae7c"));
     g.fillRect (thumbnailBounds);
 
-    g.setColour (juce::Colours::lightseagreen);
-    
+    //g.setColour (juce::Colours::lightseagreen);
+    g.setColour (juce::Colour::fromString("#F9D923"));
 
-    //make draw Wave only when new file is loaded ? or does it need to draw new when draw positio is drawn on top??
-    
+
+    //make draw Wave only when new file is loaded ? or does it need to draw new when draw position is drawn on top??
     audioProcessor.thumbnail.drawChannels (g, thumbnailBounds, 0.0, audioProcessor.thumbnail.getTotalLength(), 1.0f);
     
 
@@ -124,7 +119,7 @@ void WaveDisplay::paintIfFileLoaded (juce::Graphics& g, const juce::Rectangle<in
             if (auto sound = dynamic_cast<GrainSound*>(audioProcessor.mSampler.getSound(0).get()))
             {
                 //get MidiNotenUmber that is trigerred if it is the root than draw red !!needs to be changed here!!!
-                if ( audioProcessor.midiNoteForNormalPitch == 61 )
+                if ( voice->getCurrentMidiNumber() == audioProcessor.midiNoteForNormalPitch )
                 {
                     g.setColour (juce::Colours::red);
                     g.drawLine (drawPosition, (float) thumbnailBounds.getY(), drawPosition, (float) thumbnailBounds.getBottom(), 1.5f);
@@ -142,9 +137,8 @@ void WaveDisplay::paintIfFileLoaded (juce::Graphics& g, const juce::Rectangle<in
     
     if (auto sound = dynamic_cast<GrainSound*>(audioProcessor.mSampler.getSound(0).get()))
     {
-        auto& numKeys = *audioProcessor.apvts.getRawParameterValue("numKeys");
-        auto numFragments = numKeys > 0 ?  24 : 48;
-        auto widthOfFragment = *audioProcessor.apvts.getRawParameterValue("duration") * audioLength;
+        auto numFragments = sound->getNumKeysAvailable();
+        auto widthOfFragment = sound->getDurationParam() / audioProcessor.getSampleRate();
         auto initialXPosition = *audioProcessor.apvts.getRawParameterValue("position") * audioLength;
         auto& spreadParam = *audioProcessor.apvts.getRawParameterValue("spread");
         
