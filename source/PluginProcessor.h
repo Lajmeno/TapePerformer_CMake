@@ -95,6 +95,7 @@ private:
     std::atomic<float>* secondFluxParameter  = nullptr;
     std::atomic<float>* thirdFluxParameter  = nullptr;
     std::atomic<float>* fourthFluxParameter  = nullptr;
+    std::atomic<float>* fluxModeRange  = nullptr;
     std::atomic<float>* positionParameter = nullptr;
     std::atomic<float>* durationParameter  = nullptr;
     std::atomic<float>* spreadParameter = nullptr;

@@ -42,13 +42,17 @@ private:
     juce::TextButton thirdFluxModeButton;
     juce::TextButton fourthFluxModeButton;
 
+    juce::Slider rangeSlider;
+    juce::Label rangeLabel;
+
     using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
 
-    std::unique_ptr<ButtonAttachment> modeAttachment;
     std::unique_ptr<ButtonAttachment> firstFluxButtonAttachment;
     std::unique_ptr<ButtonAttachment> secondFluxButtonAttachment;
     std::unique_ptr<ButtonAttachment> thirdFluxButtonAttachment;
     std::unique_ptr<ButtonAttachment> fourthFluxButtonAttachment;
+
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> rangeAttachment;
 
     void setTextButton(juce::Button& button, juce::String text);
 

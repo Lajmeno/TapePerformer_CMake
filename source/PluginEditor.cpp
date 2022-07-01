@@ -101,7 +101,7 @@ void TapePerformerAudioProcessorEditor::paint (juce::Graphics& g)
     auto bgHue = juce::Colour::fromString("#FFB830").getHue();
     auto backgroundColour = juce::Colour(bgHue, 0.5f, .0f, 1.0f);
 
-    g.fillAll(juce::Colour::fromString("#187498").brighter(.3f));
+    g.fillAll(getLookAndFeel().findColour (customLookAndFeel.backgroundColourId));
 
     auto fullArea = getLocalBounds().toFloat();
     auto waveDisplayBorder = fullArea.removeFromTop(static_cast<int>(fullArea.getHeight() * 0.5f));

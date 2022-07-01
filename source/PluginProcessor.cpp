@@ -32,6 +32,7 @@ apvts (*this, nullptr, "PARAMETERS", createParameterLayout())
     secondFluxParameter = apvts.getRawParameterValue("secondFluxMode");
     thirdFluxParameter = apvts.getRawParameterValue("thirdFluxMode");
     fourthFluxParameter = apvts.getRawParameterValue("fourthFluxMode");
+    fluxModeRange = apvts.getRawParameterValue("fluxModeRange");
     positionParameter = apvts.getRawParameterValue("position");
     durationParameter = apvts.getRawParameterValue("duration");
     spreadParameter = apvts.getRawParameterValue("spread");
@@ -315,6 +316,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout TapePerformerAudioProcessor:
     params.add(std::make_unique<juce::AudioParameterBool>("thirdFluxMode", "Third Flux Mode", false));
 
     params.add(std::make_unique<juce::AudioParameterBool>("fourthFluxMode", "Fourth Flux Mode", false));
+
+    params.add(std::make_unique<juce::AudioParameterFloat>("fluxModeRange", "Flux Mode Range", 0.0f, 1.0f, 0.5f));
 
     params.add(std::make_unique<juce::AudioParameterFloat>("position", "SamplePosition", juce::NormalisableRange<float>(0.f, 1.f, 0.001f, 1.f), 0.25f));
     

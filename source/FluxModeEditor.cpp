@@ -17,6 +17,8 @@ FluxModeEditor::FluxModeEditor(TapePerformerAudioProcessor& p) : audioProcessor(
 
     setLookAndFeel(&customLookAndFeel);
 
+    rangeAttachment =std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "fluxModeRange", rangeSlider);
+
     firstFluxButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "firstFluxMode", firstFluxModeButton);
     secondFluxButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "secondFluxMode", secondFluxModeButton);
     thirdFluxButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "thirdFluxMode", thirdFluxModeButton);
@@ -26,6 +28,15 @@ FluxModeEditor::FluxModeEditor(TapePerformerAudioProcessor& p) : audioProcessor(
     setTextButton(secondFluxModeButton, "Backward");
     setTextButton(thirdFluxModeButton, "Back and Forth");
     setTextButton(fourthFluxModeButton, "Random");
+
+    addAndMakeVisible(rangeLabel);
+    rangeLabel.setText ("Range", juce::dontSendNotification);
+    //positionLabel.attachToComponent (&slider, false);
+    rangeLabel.setFont (juce::Font (14.0f, juce::Font::bold));
+    rangeLabel.setJustificationType (juce::Justification::centred);
+    rangeSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    rangeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 0);
+    addAndMakeVisible(rangeSlider);
 
 
 }
@@ -42,9 +53,9 @@ void FluxModeEditor::paint (juce::Graphics& g)
 
        You should replace everything in this method with your own
        drawing code..
-    */
 
-    g.fillAll (getLookAndFeel().findColour (juce::Slider::backgroundColourId));   // clear the background
+
+    g.fillAll (getLookAndFeel().findColour (customLookAndFeel.backgroundColourId));   // clear the background
 
     g.setColour (juce::Colours::grey);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
@@ -53,16 +64,22 @@ void FluxModeEditor::paint (juce::Graphics& g)
     g.setFont (14.0f);
     g.drawText ("FluxModeEditor", getLocalBounds(),
                 juce::Justification::centred, true);   // draw some placeholder text
+                */
 }
 
 void FluxModeEditor::resized()
 {
     auto bounds = getLocalBounds();
     auto fullArea = bounds;
-    firstFluxModeButton.setBounds(bounds.removeFromTop(juce::jmax (20, fullArea.getHeight() / 6)));
-    secondFluxModeButton.setBounds(bounds.removeFromTop(juce::jmax (20, fullArea.getHeight() / 6)));
-    thirdFluxModeButton.setBounds(bounds.removeFromTop(juce::jmax (20, fullArea.getHeight() / 6)));
-    fourthFluxModeButton.setBounds(bounds.removeFromTop(juce::jmax (20, fullArea.getHeight() / 6)));
+    auto buttonArea = bounds.removeFromRight(juce::jmax (50, fullArea.getWidth() / 2));
+    firstFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (40, fullArea.getHeight() / 4)));
+    secondFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (40, fullArea.getHeight() / 4)));
+    thirdFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (40, fullArea.getHeight() / 4)));
+    fourthFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (40, fullArea.getHeight() / 4)));
+
+
+    rangeSlider.setBounds(bounds.removeFromTop(static_cast<int>(bounds.getHeight() * 0.8f)));
+    rangeLabel.setBounds(bounds);
 
     // This method is where you should set the bounds of any child
     // components that your component contains..

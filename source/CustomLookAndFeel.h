@@ -29,10 +29,27 @@
 //==============================================================================
 class CustomLookAndFeel : public juce::LookAndFeel_V4 {
 public:
+
+    enum ColourIds
+    {
+        backgroundColourId          = 0x1001200,  /**< A colour to use to fill the slider's background. */
+        thumbColourId               = 0x1001300,  /**< The colour to draw the thumb with. It's up to the look
+                                                       and feel class how this is used. */
+        trackColourId               = 0x1001310,  /**< The colour to draw the groove that the thumb moves along. */
+        rotarySliderFillColourId    = 0x1001311,  /**< For rotary sliders, this colour fills the outer curve. */
+        rotarySliderOutlineColourId = 0x1001312,  /**< For rotary sliders, this colour is used to draw the outer curve's outline. */
+
+        textBoxTextColourId         = 0x1001400,  /**< The colour for the text in the text-editor box used for editing the value. */
+        textBoxBackgroundColourId   = 0x1001500,  /**< The background colour for the text-editor box. */
+        textBoxHighlightColourId    = 0x1001600,  /**< The text highlight colour for the text-editor box. */
+        textBoxOutlineColourId      = 0x1001700   /**< The colour to use for a border around the text-editor box. */
+    };
+
     CustomLookAndFeel() {
         setColour(juce::Slider::thumbColourId, juce::Colour::fromString("#EB5353"));
         setColour(juce::Slider::rotarySliderFillColourId, juce::Colour::fromString("#EB5353"));
-        setColour(juce::Slider::backgroundColourId, juce::Colour::fromString("#187498").brighter(.3f));
+
+        setColour(backgroundColourId, juce::Colour::fromString("#187498").brighter(.3f));
     }
 
     void drawRotarySlider(juce::Graphics &g, int x, int y, int width, int height, float sliderPos,
