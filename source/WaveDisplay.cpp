@@ -166,7 +166,6 @@ void WaveDisplay::paintIfFileLoaded (juce::Graphics& g, const juce::Rectangle<in
         }
     }
 
-
 }
 
 void WaveDisplay::paintIfNoFileLoaded (juce::Graphics& g, const juce::Rectangle<int>& thumbnailBounds)

@@ -38,8 +38,6 @@ public:
     };
     
 
-
-
 private:
     
     WaveDisplay waveDisplay;
