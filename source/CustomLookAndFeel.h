@@ -32,7 +32,7 @@ public:
     CustomLookAndFeel() {
         setColour(juce::Slider::thumbColourId, juce::Colour::fromString("#EB5353"));
         setColour(juce::Slider::rotarySliderFillColourId, juce::Colour::fromString("#EB5353"));
-
+        setColour(juce::Slider::backgroundColourId, juce::Colour::fromString("#187498").brighter(.3f));
     }
 
     void drawRotarySlider(juce::Graphics &g, int x, int y, int width, int height, float sliderPos,

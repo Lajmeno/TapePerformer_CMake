@@ -14,13 +14,25 @@
 //==============================================================================
 FluxModeEditor::FluxModeEditor(TapePerformerAudioProcessor& p) : audioProcessor(p)
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
+
+    setLookAndFeel(&customLookAndFeel);
+
+    firstFluxButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "firstFluxMode", firstFluxModeButton);
+    secondFluxButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "secondFluxMode", secondFluxModeButton);
+    thirdFluxButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "thirdFluxMode", thirdFluxModeButton);
+    fourthFluxButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "fourthFluxMode", fourthFluxModeButton);
+
+    setTextButton(firstFluxModeButton, "Forward");
+    setTextButton(secondFluxModeButton, "Backward");
+    setTextButton(thirdFluxModeButton, "Back and Forth");
+    setTextButton(fourthFluxModeButton, "Random");
+
 
 }
 
 FluxModeEditor::~FluxModeEditor()
 {
+    setLookAndFeel (nullptr);
 }
 
 void FluxModeEditor::paint (juce::Graphics& g)
@@ -32,7 +44,7 @@ void FluxModeEditor::paint (juce::Graphics& g)
        drawing code..
     */
 
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
+    g.fillAll (getLookAndFeel().findColour (juce::Slider::backgroundColourId));   // clear the background
 
     g.setColour (juce::Colours::grey);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
@@ -45,7 +57,23 @@ void FluxModeEditor::paint (juce::Graphics& g)
 
 void FluxModeEditor::resized()
 {
+    auto bounds = getLocalBounds();
+    auto fullArea = bounds;
+    firstFluxModeButton.setBounds(bounds.removeFromTop(juce::jmax (20, fullArea.getHeight() / 6)));
+    secondFluxModeButton.setBounds(bounds.removeFromTop(juce::jmax (20, fullArea.getHeight() / 6)));
+    thirdFluxModeButton.setBounds(bounds.removeFromTop(juce::jmax (20, fullArea.getHeight() / 6)));
+    fourthFluxModeButton.setBounds(bounds.removeFromTop(juce::jmax (20, fullArea.getHeight() / 6)));
+
     // This method is where you should set the bounds of any child
     // components that your component contains..
 
+}
+
+void FluxModeEditor::setTextButton(juce::Button& button, juce::String text)
+{
+    button.setButtonText(text);
+    button.setRadioGroupId(FluxModeButtons);
+    addAndMakeVisible(button);
+
+    button.setClickingTogglesState(true);
 }

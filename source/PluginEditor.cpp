@@ -14,13 +14,14 @@
 
 //==============================================================================
 TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerformerAudioProcessor& p)
-    : AudioProcessorEditor (&p), waveDisplay(p), audioProcessor (p)
+    : AudioProcessorEditor (&p), waveDisplay(p), audioProcessor (p), fluxModeEditor(p)
 {
 
     setLookAndFeel(&customLookAndFeel);
 
     addAndMakeVisible(waveDisplay);
     addAndMakeVisible(envDisplay);
+    addAndMakeVisible(fluxModeEditor);
     setResizable(true, true);
     setResizeLimits(800, 250, 1200, 400);
     setSize (800, 300);
@@ -28,10 +29,6 @@ TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerfor
     
     modeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "playMode", playModeToggle);
     keysAvailableAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(audioProcessor.apvts, "numKeys", numKeysMenu);
-    firstFluxButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "firstFluxMode", firstFluxModeButton);
-    secondFluxButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "secondFluxMode", secondFluxModeButton);
-    thirdFluxButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "thirdFluxMode", thirdFluxModeButton);
-    fourthFluxButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "fourthFluxMode", fourthFluxModeButton);
 
     positionAttachment = std::make_unique<SliderAttachment>(audioProcessor.apvts, "position", positionSlider);
     durationAttachment = std::make_unique<SliderAttachment>(audioProcessor.apvts, "duration", durationSlider);
@@ -48,12 +45,6 @@ TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerfor
     gainSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 0);
     addAndMakeVisible(gainSlider);
-
-    setTextButton(firstFluxModeButton, "Forward");
-    setTextButton(secondFluxModeButton, "Backward");
-    setTextButton(thirdFluxModeButton, "Back and Forth");
-    setTextButton(fourthFluxModeButton, "Random");
-
 
     //setSliderParams(envShapeSlider);
     envShapeSlider.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
@@ -142,6 +133,7 @@ void TapePerformerAudioProcessorEditor::resized()
     
     waveDisplay.setBounds(responseArea.reduced(3));
     envDisplay.setBounds(waveEnvArea.reduced(4));
+    fluxModeEditor.setBounds(fluxModeArea.reduced(4));
 
     auto parameterArea = bounds;
     // This is generally where you'll want to lay out the positions of any
@@ -179,12 +171,6 @@ void TapePerformerAudioProcessorEditor::resized()
     auto spreadParamBounds = paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.75f));;
     spreadSlider.setBounds(spreadParamBounds);
     spreadLabel.setBounds(spreadParamBounds.removeFromTop(static_cast<int>(spreadParamBounds.getHeight() * 0.35f)));
-
-
-    firstFluxModeButton.setBounds(fluxModeArea.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
-    secondFluxModeButton.setBounds(fluxModeArea.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
-    thirdFluxModeButton.setBounds(fluxModeArea.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
-    fourthFluxModeButton.setBounds(fluxModeArea.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
 
     gainSlider.setBounds(gainArea);
 

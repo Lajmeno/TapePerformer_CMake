@@ -14,6 +14,7 @@
 #include "EnvelopeDisplay.h"
 #include "CustomToggleButton.h"
 #include "CustomLookAndFeel.h"
+#include "FluxModeEditor.h"
 //==============================================================================
 /**
 */
@@ -42,6 +43,7 @@ private:
     
     WaveDisplay waveDisplay;
     EnvelopeDisplay envDisplay;
+    FluxModeEditor fluxModeEditor;
     
     
     juce::Label modeLabel         { {}, "Modes"};
@@ -56,13 +58,6 @@ private:
     juce::Label numKeysLabel        { {}, "Fractions" };
     juce::ComboBox numKeysMenu;
 
-    juce::TextButton firstFluxModeButton;
-    juce::TextButton secondFluxModeButton;
-    juce::TextButton thirdFluxModeButton;
-    juce::TextButton fourthFluxModeButton;
-
-
-
     CustomLookAndFeel customLookAndFeel;
     juce::Slider positionSlider;
     juce::Slider durationSlider;
@@ -75,18 +70,13 @@ private:
     juce::Label durationLabel;
     juce::Label spreadLabel;
     juce::Label transposeLabel;
-    
-    
+
+
     using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
-    
     std::unique_ptr<ButtonAttachment> modeAttachment;
-    std::unique_ptr<ButtonAttachment> firstFluxButtonAttachment;
-    std::unique_ptr<ButtonAttachment> secondFluxButtonAttachment;
-    std::unique_ptr<ButtonAttachment> thirdFluxButtonAttachment;
-    std::unique_ptr<ButtonAttachment> fourthFluxButtonAttachment;
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> keysAvailableAttachment;
-    
+
     using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
     std::unique_ptr<SliderAttachment> positionAttachment;
     std::unique_ptr<SliderAttachment> durationAttachment;
