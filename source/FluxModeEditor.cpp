@@ -38,6 +38,11 @@ FluxModeEditor::FluxModeEditor(TapePerformerAudioProcessor& p) : audioProcessor(
     rangeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 0);
     addAndMakeVisible(rangeSlider);
 
+    addAndMakeVisible (onOffButton);
+    onOffButton.onClick = [this] { updateToggleState (&onOffButton);   };
+
+    onOffButton.setClickingTogglesState (true);
+
 
 }
 
@@ -65,6 +70,15 @@ void FluxModeEditor::paint (juce::Graphics& g)
     g.drawText ("FluxModeEditor", getLocalBounds(),
                 juce::Justification::centred, true);   // draw some placeholder text
                 */
+
+    /*
+    if(!onOffButton.getToggleState())
+    {
+        auto color = juce::Colours::grey;
+        g.fillAll (color.withAlpha(0.5f));   // clear the background
+
+    }
+     */
 }
 
 void FluxModeEditor::resized()
@@ -72,13 +86,23 @@ void FluxModeEditor::resized()
     auto bounds = getLocalBounds();
     auto fullArea = bounds;
     auto buttonArea = bounds.removeFromRight(juce::jmax (50, fullArea.getWidth() / 2));
-    firstFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (40, fullArea.getHeight() / 4)));
-    secondFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (40, fullArea.getHeight() / 4)));
-    thirdFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (40, fullArea.getHeight() / 4)));
-    fourthFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (40, fullArea.getHeight() / 4)));
+    firstFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (20, fullArea.getHeight() / 4)));
+    secondFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (20, fullArea.getHeight() / 4)));
+    thirdFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (20, fullArea.getHeight() / 4)));
+    fourthFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (20, fullArea.getHeight() / 4)));
 
-
-    rangeSlider.setBounds(bounds.removeFromTop(static_cast<int>(bounds.getHeight() * 0.8f)));
+    /*
+    if(!onOffButton.getToggleState())
+    {
+        onOffButton.setBounds(fullArea);
+    }
+    else
+    {
+        onOffButton.setBounds(bounds.removeFromTop(static_cast<int>(bounds.getHeight() * 0.2f)));
+    }
+     */
+    onOffButton.setBounds(bounds.removeFromTop(static_cast<int>(bounds.getHeight() * 0.2f)));
+    rangeSlider.setBounds(bounds.removeFromTop(static_cast<int>(bounds.getHeight() * 0.9f)));
     rangeLabel.setBounds(bounds);
 
     // This method is where you should set the bounds of any child
@@ -93,4 +117,26 @@ void FluxModeEditor::setTextButton(juce::Button& button, juce::String text)
     addAndMakeVisible(button);
 
     button.setClickingTogglesState(true);
+}
+
+void FluxModeEditor::updateToggleState (juce::Button* button)
+{
+    repaint();
+    /*
+    if(!button->getToggleState())
+    {
+        resized();
+        repaint();
+    }
+     */
+}
+
+void FluxModeEditor::paintOverChildren(juce::Graphics& g)
+{
+    if(!onOffButton.getToggleState())
+    {
+        auto color = juce::Colours::grey;
+        g.fillAll(color.withAlpha(0.3f));
+    }
+
 }

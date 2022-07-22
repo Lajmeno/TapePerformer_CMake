@@ -50,6 +50,7 @@ public:
         setColour(juce::Slider::rotarySliderFillColourId, juce::Colour::fromString("#EB5353"));
 
         setColour(backgroundColourId, juce::Colour::fromString("#187498").brighter(.3f));
+        setColour(thumbColourId, juce::Colour::fromString("#EB5353"));
     }
 
     void drawRotarySlider(juce::Graphics &g, int x, int y, int width, int height, float sliderPos,
@@ -88,7 +89,7 @@ public:
     void drawButtonBackground(juce::Graphics &g, juce::Button &button, const juce::Colour &backgroundColour,
                               bool, bool isButtonDown) override {
         auto buttonArea = button.getLocalBounds();
-        auto edge = 4;
+        auto edge = 1.5;
 
         buttonArea.removeFromLeft(edge);
         buttonArea.removeFromTop(edge);
@@ -135,7 +136,8 @@ public:
                           float minSliderPos,
                           float maxSliderPos,
                           const Slider::SliderStyle style,
-                          Slider &slider) override {
+                          Slider &slider) override
+    {
         //g.fillAll(slider.findColour(Slider::backgroundColourId));
 
         if (style == Slider::LinearBar)
@@ -226,6 +228,94 @@ public:
         g.setColour (outline);
         g.strokePath (p, PathStrokeType (0.3f));
     }
+
+    void drawTickBox (Graphics& g,
+                     Component& /*component*/,
+                     float x, float y, float w, float h,
+                     const bool ticked,
+                     const bool isEnabled,
+                     const bool /*isMouseOverButton*/,
+                     const bool isButtonDown)
+    {
+        Path box;
+        box.addRoundedRectangle (0.0f, 2.0f, 6.0f, 6.0f, 1.0f);
+
+        g.setColour (isEnabled ? Colours::blue.withAlpha (isButtonDown ? 0.3f : 0.1f)
+                               : Colours::lightgrey.withAlpha (0.1f));
+
+        AffineTransform trans (AffineTransform::scale (w / 9.0f, h / 9.0f).translated (x, y));
+
+        g.fillPath (box, trans);
+
+        g.setColour (Colours::black.withAlpha (0.6f));
+        g.strokePath (box, PathStrokeType (0.9f), trans);
+
+        if (ticked)
+        {
+            g.setColour (findColour (thumbColourId));
+            //g.fillRect(0.0f, 2.0f, 6.0f, 6.0f);
+
+            Path p;
+            p.addRoundedRectangle(0.25f, 2.25f, 5.0f, 5.0f, 1.0f);
+            g.fillPath (p);
+
+            g.strokePath (p, PathStrokeType (0.3f));
+
+            /*
+            Path tick;
+            tick.startNewSubPath (0.5f, 0.0f);
+            tick.lineTo (6.0f, 8.0f);
+            Path tick2;
+            tick2.startNewSubPath (6.0f, 0.0f);
+            tick2.lineTo (0.5f, 8.0f);
+
+            g.setColour (isEnabled ? Colours::black : Colours::grey);
+            g.strokePath (tick, PathStrokeType (2.5f), trans);
+            g.strokePath (tick2, PathStrokeType (2.5f), trans);
+             */
+        }
+    }
+
+
+    void drawToggleButton (Graphics& g,
+                                              ToggleButton& button,
+                                              bool isMouseOverButton,
+                                              bool isButtonDown)
+    {
+
+        const int tickWidth = jmin (20, button.getHeight());
+
+
+
+        drawTickBox (g, button, 4.0f, (button.getHeight() - tickWidth) * 0.5f,
+                     (float) tickWidth, (float) tickWidth,
+                     button.getToggleState(),
+                     button.isEnabled(),
+                     isMouseOverButton,
+                     isButtonDown);
+
+
+        /*
+        if(button.isEnabled())
+        {
+            g.setColour (findColour(backgroundColourId));
+        }
+         */
+
+        g.setColour (button.findColour (ToggleButton::textColourId));
+        g.setFont (jmin (15.0f, button.getHeight() * 0.6f));
+
+        if (! button.isEnabled())
+            g.setOpacity (0.5f);
+
+        const int textX = tickWidth + 5;
+
+        g.drawFittedText (button.getButtonText(),
+                          textX, 4,
+                          button.getWidth() - textX - 2, button.getHeight() - 8,
+                          Justification::centredLeft, 10);
+    }
+
 
 
 };

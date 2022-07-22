@@ -24,6 +24,7 @@ public:
     ~FluxModeEditor() override;
 
     void paint (juce::Graphics&) override;
+    void paintOverChildren(juce::Graphics& g) override;
     void resized() override;
 
 private:
@@ -36,6 +37,8 @@ private:
     TapePerformerAudioProcessor& audioProcessor;
 
     CustomLookAndFeel customLookAndFeel;
+
+    juce::ToggleButton onOffButton;
 
     juce::TextButton firstFluxModeButton;
     juce::TextButton secondFluxModeButton;
@@ -55,6 +58,7 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> rangeAttachment;
 
     void setTextButton(juce::Button& button, juce::String text);
+    void updateToggleState(juce::Button* button);
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FluxModeEditor)
 };
