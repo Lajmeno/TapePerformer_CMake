@@ -26,7 +26,7 @@ FluxModeEditor::FluxModeEditor(TapePerformerAudioProcessor& p) : audioProcessor(
 
     setTextButton(firstFluxModeButton, "Forward");
     setTextButton(secondFluxModeButton, "Backward");
-    setTextButton(thirdFluxModeButton, "Back and Forth");
+    setTextButton(thirdFluxModeButton, "Zig-Zag");
     setTextButton(fourthFluxModeButton, "Random");
 
     addAndMakeVisible(rangeLabel);
@@ -53,60 +53,31 @@ FluxModeEditor::~FluxModeEditor()
 
 void FluxModeEditor::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
 
-       You should replace everything in this method with your own
-       drawing code..
-
-
-    g.fillAll (getLookAndFeel().findColour (customLookAndFeel.backgroundColourId));   // clear the background
-
-    g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
-
-    g.setColour (juce::Colours::white);
-    g.setFont (14.0f);
-    g.drawText ("FluxModeEditor", getLocalBounds(),
-                juce::Justification::centred, true);   // draw some placeholder text
-                */
-
-    /*
-    if(!onOffButton.getToggleState())
-    {
-        auto color = juce::Colours::grey;
-        g.fillAll (color.withAlpha(0.5f));   // clear the background
-
-    }
-     */
+    auto color = juce::Colours::black;
+    auto bounds = getLocalBounds().toFloat().reduced(4);
+    g.setColour(color);
+    g.drawRoundedRectangle(bounds, 1.0f, 1.0f);
 }
 
 void FluxModeEditor::resized()
 {
     auto bounds = getLocalBounds();
     auto fullArea = bounds;
+    bounds.removeFromRight(juce::jmax (10, fullArea.getWidth() / 12));
     auto buttonArea = bounds.removeFromRight(juce::jmax (50, fullArea.getWidth() / 2));
-    firstFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (20, fullArea.getHeight() / 4)));
-    secondFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (20, fullArea.getHeight() / 4)));
-    thirdFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (20, fullArea.getHeight() / 4)));
-    fourthFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (20, fullArea.getHeight() / 4)));
+    buttonArea.removeFromTop(juce::jmax (20, fullArea.getHeight() / 8));
+    buttonArea.removeFromBottom(juce::jmax (20, fullArea.getHeight() / 8));
+    firstFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (20, fullArea.getHeight() / 6)));
+    secondFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (20, fullArea.getHeight() / 6)));
+    thirdFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (20, fullArea.getHeight() / 6)));
+    fourthFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (20, fullArea.getHeight() / 6)));
 
-    /*
-    if(!onOffButton.getToggleState())
-    {
-        onOffButton.setBounds(fullArea);
-    }
-    else
-    {
-        onOffButton.setBounds(bounds.removeFromTop(static_cast<int>(bounds.getHeight() * 0.2f)));
-    }
-     */
-    onOffButton.setBounds(bounds.removeFromTop(static_cast<int>(bounds.getHeight() * 0.2f)));
-    rangeSlider.setBounds(bounds.removeFromTop(static_cast<int>(bounds.getHeight() * 0.9f)));
+
+    onOffButton.setBounds(bounds.removeFromTop(static_cast<int>(bounds.getHeight() * 0.15f)));
+    rangeSlider.setBounds(bounds.removeFromTop(static_cast<int>(bounds.getHeight() * 0.85f)));
     rangeLabel.setBounds(bounds);
 
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
 
 }
 
@@ -122,13 +93,6 @@ void FluxModeEditor::setTextButton(juce::Button& button, juce::String text)
 void FluxModeEditor::updateToggleState (juce::Button* button)
 {
     repaint();
-    /*
-    if(!button->getToggleState())
-    {
-        resized();
-        repaint();
-    }
-     */
 }
 
 void FluxModeEditor::paintOverChildren(juce::Graphics& g)
@@ -136,7 +100,10 @@ void FluxModeEditor::paintOverChildren(juce::Graphics& g)
     if(!onOffButton.getToggleState())
     {
         auto color = juce::Colours::grey;
-        g.fillAll(color.withAlpha(0.3f));
+        auto bounds = getLocalBounds().toFloat().reduced(4);
+        g.setColour(color.withAlpha(0.4f));
+        g.fillRoundedRectangle(bounds, 1.0f);
+        //g.fillAll(color.withAlpha(0.3f));
     }
 
 }

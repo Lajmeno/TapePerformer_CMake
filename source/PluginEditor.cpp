@@ -112,9 +112,9 @@ void TapePerformerAudioProcessorEditor::paint (juce::Graphics& g)
     auto gainAreaBorder = fullArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.09f));
     g.drawLine(gainAreaBorder.getX(), gainAreaBorder.getY() + gainAreaBorder.getBottom() * 0.05f, gainAreaBorder.getX(), gainAreaBorder.getBottom() * 0.95f, 1.25f);
 
-    auto fluxAreaBorder = fullArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.215f)).reduced(6);;
+    //auto fluxAreaBorder = fullArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.215f)).reduced(6);;
     //g.drawLine(waveAreaBorder.getX(), waveAreaBorder.getY() + waveAreaBorder.getBottom() * 0.05f, waveAreaBorder.getX(), waveAreaBorder.getBottom() * 0.95f, 1.25f);
-    g.drawRoundedRectangle(fluxAreaBorder, 8, 1.5f);
+    //g.drawRoundedRectangle(fluxAreaBorder, 8, 1.5f);
 
     auto modeParamsArea = fullArea.removeFromLeft(juce::jmax(80.0f, fullArea.getWidth() / 6)).reduced(6);
     g.drawRoundedRectangle(modeParamsArea, 8, 1.5f);
@@ -133,7 +133,7 @@ void TapePerformerAudioProcessorEditor::resized()
     
     waveDisplay.setBounds(responseArea.reduced(3));
     envDisplay.setBounds(waveEnvArea.reduced(4));
-    fluxModeEditor.setBounds(fluxModeArea.reduced(4));
+    fluxModeEditor.setBounds(fluxModeArea.reduced(0));
 
     auto parameterArea = bounds;
     // This is generally where you'll want to lay out the positions of any

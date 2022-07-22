@@ -49,6 +49,11 @@ public:
         setColour(juce::Slider::thumbColourId, juce::Colour::fromString("#EB5353"));
         setColour(juce::Slider::rotarySliderFillColourId, juce::Colour::fromString("#EB5353"));
 
+        //setColour( juce::TextButton::textColourOnId, juce::Colours::grey);
+        setColour( juce::TextButton::buttonColourId, juce::Colours::grey.darker(0.2f));
+        setColour( juce::TextButton::buttonOnColourId, findColour(thumbColourId));
+
+
         setColour(backgroundColourId, juce::Colour::fromString("#187498").brighter(.3f));
         setColour(thumbColourId, juce::Colour::fromString("#EB5353"));
     }
@@ -86,29 +91,11 @@ public:
         g.fillPath(p);
     }
 
-    void drawButtonBackground(juce::Graphics &g, juce::Button &button, const juce::Colour &backgroundColour,
-                              bool, bool isButtonDown) override {
-        auto buttonArea = button.getLocalBounds();
-        auto edge = 1.5;
-
-        buttonArea.removeFromLeft(edge);
-        buttonArea.removeFromTop(edge);
-
-        // shadow
-        g.setColour(juce::Colours::darkgrey.withAlpha(0.5f));
-        g.fillRect(buttonArea);
-
-        auto offset = isButtonDown ? -edge / 2 : -edge;
-        buttonArea.translate(offset, offset);
-
-        g.setColour(backgroundColour);
-        g.fillRect(buttonArea);
-    }
 
     void drawButtonText(juce::Graphics &g, juce::TextButton &button, bool, bool isButtonDown) override {
         auto font = getTextButtonFont(button, button.getHeight());
         g.setFont(font);
-        g.setColour(button.findColour(button.getToggleState() ? juce::TextButton::textColourOnId
+        g.setColour(button.findColour(button.getToggleState() ? juce::TextButton::textColourOffId
                                                               : juce::TextButton::textColourOffId)
                             .withMultipliedAlpha(button.isEnabled() ? 1.0f : 0.5f));
 
@@ -248,31 +235,17 @@ public:
         g.fillPath (box, trans);
 
         g.setColour (Colours::black.withAlpha (0.6f));
-        g.strokePath (box, PathStrokeType (0.9f), trans);
+        g.strokePath (box, PathStrokeType (2.0f), trans);
 
         if (ticked)
         {
             g.setColour (findColour (thumbColourId));
-            //g.fillRect(0.0f, 2.0f, 6.0f, 6.0f);
 
             Path p;
-            p.addRoundedRectangle(0.25f, 2.25f, 5.0f, 5.0f, 1.0f);
-            g.fillPath (p);
+            p.addRoundedRectangle(0.8f, 2.8f, 4.5f, 4.5f, 0.5f);
+            g.fillPath (p, trans);
 
-            g.strokePath (p, PathStrokeType (0.3f));
-
-            /*
-            Path tick;
-            tick.startNewSubPath (0.5f, 0.0f);
-            tick.lineTo (6.0f, 8.0f);
-            Path tick2;
-            tick2.startNewSubPath (6.0f, 0.0f);
-            tick2.lineTo (0.5f, 8.0f);
-
-            g.setColour (isEnabled ? Colours::black : Colours::grey);
-            g.strokePath (tick, PathStrokeType (2.5f), trans);
-            g.strokePath (tick2, PathStrokeType (2.5f), trans);
-             */
+            g.strokePath (p, PathStrokeType (0.3f), trans);
         }
     }
 
@@ -293,14 +266,6 @@ public:
                      button.isEnabled(),
                      isMouseOverButton,
                      isButtonDown);
-
-
-        /*
-        if(button.isEnabled())
-        {
-            g.setColour (findColour(backgroundColourId));
-        }
-         */
 
         g.setColour (button.findColour (ToggleButton::textColourId));
         g.setFont (jmin (15.0f, button.getHeight() * 0.6f));
