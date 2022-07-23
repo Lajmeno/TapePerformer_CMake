@@ -46,6 +46,11 @@ TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerfor
     gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 0);
     addAndMakeVisible(gainSlider);
 
+    addAndMakeVisible (gainLabel);
+    gainLabel.setFont (textFont);
+    gainLabel.setJustificationType (juce::Justification::centred);
+    gainLabel.setText("Gain", juce::dontSendNotification);
+
     //setSliderParams(envShapeSlider);
     envShapeSlider.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
     envShapeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 0);
@@ -109,8 +114,10 @@ void TapePerformerAudioProcessorEditor::paint (juce::Graphics& g)
     g.drawRect(waveDisplayBorder, 3.0f);
     g.drawRect(fullArea, 2.0f);
 
+    /*
     auto gainAreaBorder = fullArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.09f));
     g.drawLine(gainAreaBorder.getX(), gainAreaBorder.getY() + gainAreaBorder.getBottom() * 0.05f, gainAreaBorder.getX(), gainAreaBorder.getBottom() * 0.95f, 1.25f);
+     */
 
     //auto fluxAreaBorder = fullArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.215f)).reduced(6);;
     //g.drawLine(waveAreaBorder.getX(), waveAreaBorder.getY() + waveAreaBorder.getBottom() * 0.05f, waveAreaBorder.getX(), waveAreaBorder.getBottom() * 0.95f, 1.25f);
@@ -126,7 +133,7 @@ void TapePerformerAudioProcessorEditor::resized()
 
     auto bounds = getLocalBounds();
     auto responseArea = bounds.removeFromTop(static_cast<int>(bounds.getHeight() * 0.5));
-    auto gainArea = bounds.removeFromRight(static_cast<int>(bounds.getWidth() * 0.1));
+    auto gainArea = bounds.removeFromRight(static_cast<int>(bounds.getWidth() * 0.08f));
     auto fluxModeArea = bounds.removeFromRight(static_cast<int>(bounds.getWidth() * 0.2));
     auto waveEnvArea = bounds.removeFromRight(static_cast<int>(bounds.getWidth() * 0.2));
     auto waveEnvParams = waveEnvArea.removeFromBottom(static_cast<int>(bounds.getHeight() * 0.3));
@@ -172,6 +179,7 @@ void TapePerformerAudioProcessorEditor::resized()
     spreadSlider.setBounds(spreadParamBounds);
     spreadLabel.setBounds(spreadParamBounds.removeFromTop(static_cast<int>(spreadParamBounds.getHeight() * 0.35f)));
 
+    gainLabel.setBounds(gainArea.removeFromTop(juce::jmax (20, gainArea.getHeight() / 10)));
     gainSlider.setBounds(gainArea);
 
     envShapeSlider.setBounds(waveEnvParams);
@@ -184,7 +192,7 @@ void TapePerformerAudioProcessorEditor::setSliderParams(juce::Slider& slider, ju
     addAndMakeVisible (label);
     label.setText (name, juce::dontSendNotification);
     //positionLabel.attachToComponent (&slider, false);
-    label.setFont (juce::Font (14.0f, juce::Font::bold));
+    label.setFont (textFont);
     label.setJustificationType (juce::Justification::centred);
 
     slider.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);

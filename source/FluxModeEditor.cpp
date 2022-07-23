@@ -31,9 +31,9 @@ FluxModeEditor::FluxModeEditor(TapePerformerAudioProcessor& p) : audioProcessor(
 
     addAndMakeVisible(rangeLabel);
     rangeLabel.setText ("Range", juce::dontSendNotification);
-    //positionLabel.attachToComponent (&slider, false);
     rangeLabel.setFont (juce::Font (14.0f, juce::Font::bold));
     rangeLabel.setJustificationType (juce::Justification::centred);
+
     rangeSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     rangeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 0);
     addAndMakeVisible(rangeSlider);
@@ -55,7 +55,7 @@ void FluxModeEditor::paint (juce::Graphics& g)
 {
 
     auto color = juce::Colours::black;
-    auto bounds = getLocalBounds().toFloat().reduced(4);
+    auto bounds = getLocalBounds().toFloat().reduced(6);
     g.setColour(color);
     g.drawRoundedRectangle(bounds, 1.0f, 1.0f);
 }
@@ -66,17 +66,21 @@ void FluxModeEditor::resized()
     auto fullArea = bounds;
     bounds.removeFromRight(juce::jmax (10, fullArea.getWidth() / 12));
     auto buttonArea = bounds.removeFromRight(juce::jmax (50, fullArea.getWidth() / 2));
-    buttonArea.removeFromTop(juce::jmax (20, fullArea.getHeight() / 8));
-    buttonArea.removeFromBottom(juce::jmax (20, fullArea.getHeight() / 8));
+    buttonArea.removeFromTop(juce::jmax (20, fullArea.getHeight() / 5));
+    buttonArea.removeFromBottom(juce::jmax (20, fullArea.getHeight() / 10));
     firstFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (20, fullArea.getHeight() / 6)));
     secondFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (20, fullArea.getHeight() / 6)));
     thirdFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (20, fullArea.getHeight() / 6)));
     fourthFluxModeButton.setBounds(buttonArea.removeFromTop(juce::jmax (20, fullArea.getHeight() / 6)));
 
+    auto onOffButtonArea = bounds;
+    onOffButtonArea.removeFromBottom(static_cast<int>(bounds.getHeight() * 0.8f));
+    onOffButton.setBounds(onOffButtonArea.removeFromRight(static_cast<int>(bounds.getWidth() * 0.9f)));
 
-    onOffButton.setBounds(bounds.removeFromTop(static_cast<int>(bounds.getHeight() * 0.15f)));
-    rangeSlider.setBounds(bounds.removeFromTop(static_cast<int>(bounds.getHeight() * 0.85f)));
-    rangeLabel.setBounds(bounds);
+    auto rangeSliderArea = bounds;
+    rangeSliderArea.removeFromBottom(static_cast<int>(bounds.getHeight() * 0.1f));
+    rangeSlider.setBounds(rangeSliderArea.removeFromBottom(static_cast<int>(bounds.getHeight() * 0.78f)));
+    rangeLabel.setBounds(bounds.removeFromBottom(static_cast<int>(bounds.getHeight() * 0.25f)));
 
 
 }
@@ -100,8 +104,8 @@ void FluxModeEditor::paintOverChildren(juce::Graphics& g)
     if(!onOffButton.getToggleState())
     {
         auto color = juce::Colours::grey;
-        auto bounds = getLocalBounds().toFloat().reduced(4);
-        g.setColour(color.withAlpha(0.4f));
+        auto bounds = getLocalBounds().toFloat().reduced(6);
+        g.setColour(color.withAlpha(0.5f));
         g.fillRoundedRectangle(bounds, 1.0f);
         //g.fillAll(color.withAlpha(0.3f));
     }

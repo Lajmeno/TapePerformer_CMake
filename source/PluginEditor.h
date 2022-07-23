@@ -52,7 +52,7 @@ private:
     CustomToggleButton playModeToggle2{"Single", "Sustain"};
 
 
-    juce::Font textFont   { 12.0f, juce::Font::bold};
+    juce::Font textFont   { 14.0f, juce::Font::bold};
 
 
     juce::Label numKeysLabel        { {}, "Fractions" };
@@ -70,6 +70,7 @@ private:
     juce::Label durationLabel;
     juce::Label spreadLabel;
     juce::Label transposeLabel;
+    juce::Label gainLabel;
 
 
     using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
