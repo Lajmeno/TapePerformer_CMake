@@ -19,9 +19,6 @@
 /**
 */
 class TapePerformerAudioProcessorEditor  : public juce::AudioProcessorEditor
-//,
-//public juce::FileDragAndDropTarget,
-//private juce::Timer
 {
 public:
     TapePerformerAudioProcessorEditor (TapePerformerAudioProcessor&);
@@ -30,8 +27,6 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
-    
-    void updateToggleState(juce::Button* button, juce::String name);
     
     enum RadioButtonIds
     {

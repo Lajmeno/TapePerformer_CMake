@@ -109,73 +109,61 @@ void TapePerformerAudioProcessorEditor::paint (juce::Graphics& g)
     g.fillAll(getLookAndFeel().findColour (customLookAndFeel.backgroundColourId));
 
     auto fullArea = getLocalBounds().toFloat();
-    auto waveDisplayBorder = fullArea.removeFromTop(static_cast<int>(fullArea.getHeight() * 0.5f));
+    auto parameterArea = getLocalBounds().toFloat();
+    auto waveDisplayBorder = parameterArea.removeFromTop(static_cast<int>(fullArea.getHeight() * 0.5f));
     g.setColour(Colours::black);
     g.drawRect(waveDisplayBorder, 3.0f);
     g.drawRect(fullArea, 2.0f);
 
-    /*
-    auto gainAreaBorder = fullArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.09f));
-    g.drawLine(gainAreaBorder.getX(), gainAreaBorder.getY() + gainAreaBorder.getBottom() * 0.05f, gainAreaBorder.getX(), gainAreaBorder.getBottom() * 0.95f, 1.25f);
-     */
 
-    //auto fluxAreaBorder = fullArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.215f)).reduced(6);;
-    //g.drawLine(waveAreaBorder.getX(), waveAreaBorder.getY() + waveAreaBorder.getBottom() * 0.05f, waveAreaBorder.getX(), waveAreaBorder.getBottom() * 0.95f, 1.25f);
-    //g.drawRoundedRectangle(fluxAreaBorder, 8, 1.5f);
+    auto settingsArea = parameterArea.removeFromLeft(static_cast<int>(fullArea.getWidth() * 0.14)).reduced(6);
+    g.drawRoundedRectangle(settingsArea, 8, 1.0f);
 
-    auto modeParamsArea = fullArea.removeFromLeft(juce::jmax(80.0f, fullArea.getWidth() / 6)).reduced(6);
-    g.drawRoundedRectangle(modeParamsArea, 8, 1.5f);
+    auto transposeArea = parameterArea.removeFromLeft(static_cast<int>(fullArea.getWidth() * 0.11)).reduced(6);
+    g.drawRoundedRectangle(transposeArea, 8, 1.0f);
 
 }
 
 void TapePerformerAudioProcessorEditor::resized()
 {
+    auto fullArea = getLocalBounds();
+    auto parameterArea = fullArea;
+    auto responseArea = parameterArea.removeFromTop(static_cast<int>(fullArea.getHeight() * 0.5));
+    auto gainArea = parameterArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.08f));
+    auto fluxModeArea = parameterArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.2));
+    auto waveEnvArea = parameterArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.15));
+    auto waveEnvParams = waveEnvArea.removeFromBottom(static_cast<int>(parameterArea.getHeight() * 0.3));
+    auto mainParamArea = parameterArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.32));
+    auto transposeArea = parameterArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.11)).reduced(10);
+    auto settingsArea = parameterArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.14)).reduced(10);;
 
-    auto bounds = getLocalBounds();
-    auto responseArea = bounds.removeFromTop(static_cast<int>(bounds.getHeight() * 0.5));
-    auto gainArea = bounds.removeFromRight(static_cast<int>(bounds.getWidth() * 0.08f));
-    auto fluxModeArea = bounds.removeFromRight(static_cast<int>(bounds.getWidth() * 0.2));
-    auto waveEnvArea = bounds.removeFromRight(static_cast<int>(bounds.getWidth() * 0.2));
-    auto waveEnvParams = waveEnvArea.removeFromBottom(static_cast<int>(bounds.getHeight() * 0.3));
-    
+
     waveDisplay.setBounds(responseArea.reduced(3));
-    envDisplay.setBounds(waveEnvArea.reduced(4));
+    envDisplay.setBounds(waveEnvArea.reduced(6));
     fluxModeEditor.setBounds(fluxModeArea.reduced(0));
 
-    auto parameterArea = bounds;
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
-    
-    auto extraSettings = parameterArea.removeFromLeft(juce::jmax (80, bounds.getWidth() / 6)).reduced(8);
-    
-    auto generalSettings = parameterArea.removeFromLeft(juce::jmax (40, bounds.getWidth() / 6));
-    auto paramArea = parameterArea.removeFromLeft(juce::jmax (250, bounds.getWidth() / 4));
-    //auto durationArea = parameterArea.removeFromLeft(juce::jmax (60, bounds.getWidth() / 4));
-    //auto spreadArea = parameterArea.removeFromLeft(juce::jmax (60, bounds.getWidth() / 4));
-    
-    modeLabel.setBounds(extraSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 10)));
-    
-    playModeToggle.setBounds(extraSettings.removeFromTop(juce::jmax (16, parameterArea.getHeight() / 10)));
-    extraSettings.removeFromTop(juce::jmax (3, parameterArea.getHeight() / 16));
-    playModeToggle2.setBounds(extraSettings.removeFromTop(juce::jmax (16, parameterArea.getHeight() / 10)));
 
-    numKeysLabel.setBounds(extraSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
-    numKeysMenu.setBounds(extraSettings.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)));
+    numKeysLabel.setBounds(settingsArea.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)).reduced(2));
+    numKeysMenu.setBounds(settingsArea.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 6)).reduced(2));
+    settingsArea.removeFromTop(juce::jmax (3, parameterArea.getHeight() / 16));
+    modeLabel.setBounds(settingsArea.removeFromTop(juce::jmax (20, parameterArea.getHeight() / 10)));
+    playModeToggle.setBounds(settingsArea.removeFromTop(juce::jmax (16, parameterArea.getHeight() / 10)));
+    settingsArea.removeFromTop(juce::jmax (3, parameterArea.getHeight() / 16));
+    playModeToggle2.setBounds(settingsArea.removeFromTop(juce::jmax (16, parameterArea.getHeight() / 10)));
 
-    transposeLabel.setBounds(generalSettings.removeFromTop(juce::jmax (40, parameterArea.getHeight() / 4)));
-    transposeSlider.setBounds(generalSettings.removeFromTop(juce::jmax (40, parameterArea.getHeight() / 2)));
+    transposeLabel.setBounds(transposeArea.removeFromTop(juce::jmax (40, parameterArea.getHeight() / 4)));
+    transposeSlider.setBounds(transposeArea.removeFromTop(juce::jmax (40, parameterArea.getHeight() / 2)));
 
-    //positionLabel.setBounds(paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.2f)));
-    paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.1f));
-    auto positionParamBounds = paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.3f));
+    mainParamArea.removeFromTop(static_cast<int>(mainParamArea.getHeight() * 0.1f));
+    auto positionParamBounds = mainParamArea.removeFromTop(static_cast<int>(mainParamArea.getHeight() * 0.3f));
     positionSlider.setBounds(positionParamBounds);
     positionLabel.setBounds(positionParamBounds.removeFromTop(static_cast<int>(positionParamBounds.getHeight() * 0.3f)));
 
-    auto durationParamBounds = paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.428f));
+    auto durationParamBounds = mainParamArea.removeFromTop(static_cast<int>(mainParamArea.getHeight() * 0.428f));
     durationSlider.setBounds(durationParamBounds);
     durationLabel.setBounds(durationParamBounds.removeFromTop(static_cast<int>(durationParamBounds.getHeight() * 0.3f)));
 
-    auto spreadParamBounds = paramArea.removeFromTop(static_cast<int>(paramArea.getHeight() * 0.75f));;
+    auto spreadParamBounds = mainParamArea.removeFromTop(static_cast<int>(mainParamArea.getHeight() * 0.75f));;
     spreadSlider.setBounds(spreadParamBounds);
     spreadLabel.setBounds(spreadParamBounds.removeFromTop(static_cast<int>(spreadParamBounds.getHeight() * 0.35f)));
 
@@ -191,7 +179,6 @@ void TapePerformerAudioProcessorEditor::setSliderParams(juce::Slider& slider, ju
 {
     addAndMakeVisible (label);
     label.setText (name, juce::dontSendNotification);
-    //positionLabel.attachToComponent (&slider, false);
     label.setFont (textFont);
     label.setJustificationType (juce::Justification::centred);
 
@@ -220,10 +207,3 @@ void TapePerformerAudioProcessorEditor::setTextButton(juce::Button& button, juce
     button.setClickingTogglesState(true);
 }
 
-void TapePerformerAudioProcessorEditor::updateToggleState (juce::Button* button, juce::String name)
-{
-    auto state = button->getToggleState();
-    juce::String stateString = state ? "ON" : "OFF";
-
-    //juce::Logger::outputDebugString (std::move(name) + " Button changed to " + stateString);
-}

@@ -49,10 +49,11 @@ public:
         setColour(juce::Slider::thumbColourId, juce::Colour::fromString("#EB5353"));
         setColour(juce::Slider::rotarySliderFillColourId, juce::Colour::fromString("#EB5353"));
 
-        //setColour( juce::TextButton::textColourOnId, juce::Colours::grey);
+        setColour(juce::ComboBox::backgroundColourId, juce::Colours::grey.darker(0.4f));
+        setColour(juce::ComboBox::buttonColourId, juce::Colours::grey.darker(0.2f));
+
         setColour( juce::TextButton::buttonColourId, juce::Colours::grey.darker(0.2f));
         setColour( juce::TextButton::buttonOnColourId, findColour(thumbColourId));
-
 
         setColour(backgroundColourId, juce::Colour::fromString("#187498").brighter(.3f));
         setColour(thumbColourId, juce::Colour::fromString("#EB5353"));
