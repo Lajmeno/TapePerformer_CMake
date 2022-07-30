@@ -27,16 +27,16 @@ EnvelopeDisplay::~EnvelopeDisplay()
 void EnvelopeDisplay::paint (juce::Graphics& g)
 {
 
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
+    g.fillAll (juce::Colours::grey.darker(0.2f));   // clear the background
     
     auto bounds = getLocalBounds().toFloat();
 
-    g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
+    g.setColour (juce::Colours::black);
+    g.drawRect (getLocalBounds(), 2);   // draw an outline around the component
 
     g.setColour (juce::Colours::white);
 
-    g.drawRoundedRectangle(bounds, 4, 2.0f);
+    //g.drawRoundedRectangle(bounds, 4, 2.0f);
 
     auto waveDrawArea = bounds.reduced(2);
     drawWaveform(g, waveDrawArea);

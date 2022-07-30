@@ -73,8 +73,9 @@ public:
         g.setColour(slider.findColour(Slider::rotarySliderFillColourId));
         g.fillEllipse(rx, ry, rw, rw);
 
+        //0-middle-point
         g.setColour(juce::Colours::black);
-        g.fillEllipse(centreX - 2.0f, y, radius * 0.125f, radius * 0.125f);
+        g.fillEllipse(centreX - 2.0f, y, radius * 0.15f, radius * 0.15f);
 
         // outline
         g.setColour(juce::Colours::red);

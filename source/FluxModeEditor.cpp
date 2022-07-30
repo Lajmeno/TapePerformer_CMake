@@ -19,6 +19,7 @@ FluxModeEditor::FluxModeEditor(TapePerformerAudioProcessor& p) : audioProcessor(
 
     rangeAttachment =std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "fluxModeRange", rangeSlider);
 
+    fluxModeOnButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "fluxModeOn", onOffButton);
     firstFluxButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "firstFluxMode", firstFluxModeButton);
     secondFluxButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "secondFluxMode", secondFluxModeButton);
     thirdFluxButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "thirdFluxMode", thirdFluxModeButton);
@@ -53,11 +54,9 @@ FluxModeEditor::~FluxModeEditor()
 
 void FluxModeEditor::paint (juce::Graphics& g)
 {
-
-    auto color = juce::Colours::black;
     auto bounds = getLocalBounds().toFloat().reduced(6);
-    g.setColour(color);
-    g.drawRoundedRectangle(bounds, 1.0f, 1.0f);
+    g.setColour(juce::Colours::black);
+    g.drawRoundedRectangle(bounds, 8, 1.0f);
 }
 
 void FluxModeEditor::resized()
@@ -106,8 +105,7 @@ void FluxModeEditor::paintOverChildren(juce::Graphics& g)
         auto color = juce::Colours::grey;
         auto bounds = getLocalBounds().toFloat().reduced(6);
         g.setColour(color.withAlpha(0.5f));
-        g.fillRoundedRectangle(bounds, 1.0f);
-        //g.fillAll(color.withAlpha(0.3f));
+        g.fillRoundedRectangle(bounds, 8);
     }
 
 }

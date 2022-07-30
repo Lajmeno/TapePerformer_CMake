@@ -28,6 +28,7 @@ apvts (*this, nullptr, "PARAMETERS", createParameterLayout())
     
     modeParameter = apvts.getRawParameterValue ("playMode");
     availableKeysParameter = apvts.getRawParameterValue("numKeys");
+    fluxModeOnParameter = apvts.getRawParameterValue("fluxModeOn");
     firstFluxParameter = apvts.getRawParameterValue("firstFluxMode");
     secondFluxParameter = apvts.getRawParameterValue("secondFluxMode");
     thirdFluxParameter = apvts.getRawParameterValue("thirdFluxMode");
@@ -179,8 +180,15 @@ void TapePerformerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer
         auto& duration = *apvts.getRawParameterValue("duration");
         auto& spread = *apvts.getRawParameterValue("spread");
         auto& midiTrasposition = *apvts.getRawParameterValue("transpose");
-        std::vector<float> fluxMode = {*apvts.getRawParameterValue("firstFluxMode"), *apvts.getRawParameterValue("secondFluxMode"), *apvts.getRawParameterValue("thirdFluxMode"), *apvts.getRawParameterValue("fourthFluxMode")};
-        sound->updateParams(mode, (int)availableKeys, (double)position, (double)duration, spread, fluxMode, (int)midiTrasposition);
+        std::vector<float> fluxMode = {0, 0, 0, 0};
+        if(*apvts.getRawParameterValue("fluxModeOn"))
+        {
+            fluxMode = {*apvts.getRawParameterValue("firstFluxMode"), *apvts.getRawParameterValue("secondFluxMode"), *apvts.getRawParameterValue("thirdFluxMode"), *apvts.getRawParameterValue("fourthFluxMode")};
+        }
+        auto& fluxModeRange = *apvts.getRawParameterValue("fluxModeRange");
+
+
+        sound->updateParams(mode, (int)availableKeys, (double)position, (double)duration, spread, fluxMode, (int)midiTrasposition, fluxModeRange);
     }
     
     mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
@@ -308,6 +316,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout TapePerformerAudioProcessor:
     params.add(std::make_unique<juce::AudioParameterChoice>("playMode", "Playing Mode", juce::StringArray("Position Mode", "Pitch Mode"), 1));
     
     params.add(std::make_unique<juce::AudioParameterChoice>("numKeys", "Keys Available", juce::StringArray("12 Keys", "24 Keys", "48 Keys", "96 Keys"), 0));
+
+    params.add(std::make_unique<juce::AudioParameterBool>("fluxModeOn", "Flux Mode On", false));
 
     params.add(std::make_unique<juce::AudioParameterBool>("firstFluxMode", "First Flux Mode", false));
 

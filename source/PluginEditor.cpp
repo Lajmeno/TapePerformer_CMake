@@ -55,6 +55,11 @@ TapePerformerAudioProcessorEditor::TapePerformerAudioProcessorEditor (TapePerfor
     envShapeSlider.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
     envShapeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 0);
     addAndMakeVisible(envShapeSlider);
+
+    addAndMakeVisible (envShapeLabel);
+    envShapeLabel.setFont (textFont);
+    envShapeLabel.setJustificationType (juce::Justification::centred);
+    envShapeLabel.setText("Env-Shape", juce::dontSendNotification);
     
     
     addAndMakeVisible (modeLabel);
@@ -122,6 +127,11 @@ void TapePerformerAudioProcessorEditor::paint (juce::Graphics& g)
     auto transposeArea = parameterArea.removeFromLeft(static_cast<int>(fullArea.getWidth() * 0.11)).reduced(6);
     g.drawRoundedRectangle(transposeArea, 8, 1.0f);
 
+    auto mainParamArea = parameterArea.removeFromLeft(static_cast<int>(fullArea.getWidth() * 0.32)).reduced(6);;
+    //g.drawRoundedRectangle(mainParamArea, 8, 1.0f);
+
+    auto waveEnvArea = parameterArea.removeFromLeft(static_cast<int>(fullArea.getWidth() * 0.15)).reduced(6);
+    g.drawRoundedRectangle(waveEnvArea, 8, 1.0f);
 }
 
 void TapePerformerAudioProcessorEditor::resized()
@@ -131,15 +141,15 @@ void TapePerformerAudioProcessorEditor::resized()
     auto responseArea = parameterArea.removeFromTop(static_cast<int>(fullArea.getHeight() * 0.5));
     auto gainArea = parameterArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.08f));
     auto fluxModeArea = parameterArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.2));
-    auto waveEnvArea = parameterArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.15));
+    auto waveEnvArea = parameterArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.15)).reduced(10);;
     auto waveEnvParams = waveEnvArea.removeFromBottom(static_cast<int>(parameterArea.getHeight() * 0.3));
-    auto mainParamArea = parameterArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.32));
+    auto mainParamArea = parameterArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.32)).reduced(10);
     auto transposeArea = parameterArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.11)).reduced(10);
     auto settingsArea = parameterArea.removeFromRight(static_cast<int>(fullArea.getWidth() * 0.14)).reduced(10);;
 
 
     waveDisplay.setBounds(responseArea.reduced(3));
-    envDisplay.setBounds(waveEnvArea.reduced(6));
+    envDisplay.setBounds(waveEnvArea.reduced(0));
     fluxModeEditor.setBounds(fluxModeArea.reduced(0));
 
 
@@ -170,7 +180,8 @@ void TapePerformerAudioProcessorEditor::resized()
     gainLabel.setBounds(gainArea.removeFromTop(juce::jmax (20, gainArea.getHeight() / 10)));
     gainSlider.setBounds(gainArea);
 
-    envShapeSlider.setBounds(waveEnvParams);
+    envShapeSlider.setBounds(waveEnvParams.removeFromTop(juce::jmax (30, gainArea.getHeight() / 8)));
+    envShapeLabel.setBounds(waveEnvParams);
 
 }
 

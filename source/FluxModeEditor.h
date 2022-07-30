@@ -50,6 +50,7 @@ private:
 
     using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
 
+    std::unique_ptr<ButtonAttachment> fluxModeOnButtonAttachment;
     std::unique_ptr<ButtonAttachment> firstFluxButtonAttachment;
     std::unique_ptr<ButtonAttachment> secondFluxButtonAttachment;
     std::unique_ptr<ButtonAttachment> thirdFluxButtonAttachment;

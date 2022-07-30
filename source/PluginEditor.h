@@ -66,6 +66,7 @@ private:
     juce::Label spreadLabel;
     juce::Label transposeLabel;
     juce::Label gainLabel;
+    juce::Label envShapeLabel;
 
 
     using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;

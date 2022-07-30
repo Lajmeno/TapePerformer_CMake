@@ -91,6 +91,7 @@ private:
      
     std::atomic<float>* modeParameter = nullptr;
     std::atomic<float>* availableKeysParameter  = nullptr;
+    std::atomic<float>* fluxModeOnParameter  = nullptr;
     std::atomic<float>* firstFluxParameter  = nullptr;
     std::atomic<float>* secondFluxParameter  = nullptr;
     std::atomic<float>* thirdFluxParameter  = nullptr;
