@@ -99,13 +99,8 @@ public:
     
     double getPosition();
     int getCurrentMidiNumber() { return currentMidiNumber; }
-    
-    void createWavetableEnv();
 
 
-
-    
-    
 private:
     double sampleRate = 0;
     bool keyIsDown = false;
