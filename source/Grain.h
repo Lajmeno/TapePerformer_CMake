@@ -94,6 +94,7 @@ public:
     double setStartPosition(GrainSound* sound, bool newlyStarted);
     void setPitchRatio(GrainSound* sound, int midiNoteNumber);
     void setEnvelopeFrequency(GrainSound* sound);
+    void setCurrentFluxPosition(GrainSound* sound);
     
     
     double getPosition();
