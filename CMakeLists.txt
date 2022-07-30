@@ -73,7 +73,8 @@ target_sources(TapePerformer
         source/PluginProcessor.cpp
         source/EnvelopeDisplay.cpp
         source/Grain.cpp
-        source/WaveDisplay.cpp)
+        source/WaveDisplay.cpp
+        source/FluxModeEditor.cpp)
 
 # `target_compile_definitions` adds some preprocessor definitions to our target. In a Projucer
 # project, these might be passed in the 'Preprocessor Definitions' field. JUCE modules also make use

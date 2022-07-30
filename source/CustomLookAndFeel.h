@@ -29,10 +29,34 @@
 //==============================================================================
 class CustomLookAndFeel : public juce::LookAndFeel_V4 {
 public:
+
+    enum ColourIds
+    {
+        backgroundColourId          = 0x1001200,  /**< A colour to use to fill the slider's background. */
+        thumbColourId               = 0x1001300,  /**< The colour to draw the thumb with. It's up to the look
+                                                       and feel class how this is used. */
+        trackColourId               = 0x1001310,  /**< The colour to draw the groove that the thumb moves along. */
+        rotarySliderFillColourId    = 0x1001311,  /**< For rotary sliders, this colour fills the outer curve. */
+        rotarySliderOutlineColourId = 0x1001312,  /**< For rotary sliders, this colour is used to draw the outer curve's outline. */
+
+        textBoxTextColourId         = 0x1001400,  /**< The colour for the text in the text-editor box used for editing the value. */
+        textBoxBackgroundColourId   = 0x1001500,  /**< The background colour for the text-editor box. */
+        textBoxHighlightColourId    = 0x1001600,  /**< The text highlight colour for the text-editor box. */
+        textBoxOutlineColourId      = 0x1001700   /**< The colour to use for a border around the text-editor box. */
+    };
+
     CustomLookAndFeel() {
         setColour(juce::Slider::thumbColourId, juce::Colour::fromString("#EB5353"));
         setColour(juce::Slider::rotarySliderFillColourId, juce::Colour::fromString("#EB5353"));
 
+        setColour(juce::ComboBox::backgroundColourId, juce::Colours::grey.darker(0.4f));
+        setColour(juce::ComboBox::buttonColourId, juce::Colours::grey.darker(0.2f));
+
+        setColour( juce::TextButton::buttonColourId, juce::Colours::grey.darker(0.2f));
+        setColour( juce::TextButton::buttonOnColourId, findColour(thumbColourId));
+
+        setColour(backgroundColourId, juce::Colour::fromString("#187498").brighter(.3f));
+        setColour(thumbColourId, juce::Colour::fromString("#EB5353"));
     }
 
     void drawRotarySlider(juce::Graphics &g, int x, int y, int width, int height, float sliderPos,
@@ -49,8 +73,9 @@ public:
         g.setColour(slider.findColour(Slider::rotarySliderFillColourId));
         g.fillEllipse(rx, ry, rw, rw);
 
+        //0-middle-point
         g.setColour(juce::Colours::black);
-        g.fillEllipse(centreX - 2.0f, y, radius * 0.125f, radius * 0.125f);
+        g.fillEllipse(centreX - 2.0f, y, radius * 0.15f, radius * 0.15f);
 
         // outline
         g.setColour(juce::Colours::red);
@@ -68,29 +93,11 @@ public:
         g.fillPath(p);
     }
 
-    void drawButtonBackground(juce::Graphics &g, juce::Button &button, const juce::Colour &backgroundColour,
-                              bool, bool isButtonDown) override {
-        auto buttonArea = button.getLocalBounds();
-        auto edge = 4;
-
-        buttonArea.removeFromLeft(edge);
-        buttonArea.removeFromTop(edge);
-
-        // shadow
-        g.setColour(juce::Colours::darkgrey.withAlpha(0.5f));
-        g.fillRect(buttonArea);
-
-        auto offset = isButtonDown ? -edge / 2 : -edge;
-        buttonArea.translate(offset, offset);
-
-        g.setColour(backgroundColour);
-        g.fillRect(buttonArea);
-    }
 
     void drawButtonText(juce::Graphics &g, juce::TextButton &button, bool, bool isButtonDown) override {
         auto font = getTextButtonFont(button, button.getHeight());
         g.setFont(font);
-        g.setColour(button.findColour(button.getToggleState() ? juce::TextButton::textColourOnId
+        g.setColour(button.findColour(button.getToggleState() ? juce::TextButton::textColourOffId
                                                               : juce::TextButton::textColourOffId)
                             .withMultipliedAlpha(button.isEnabled() ? 1.0f : 0.5f));
 
@@ -118,7 +125,8 @@ public:
                           float minSliderPos,
                           float maxSliderPos,
                           const Slider::SliderStyle style,
-                          Slider &slider) override {
+                          Slider &slider) override
+    {
         //g.fillAll(slider.findColour(Slider::backgroundColourId));
 
         if (style == Slider::LinearBar)
@@ -209,6 +217,72 @@ public:
         g.setColour (outline);
         g.strokePath (p, PathStrokeType (0.3f));
     }
+
+    void drawTickBox (Graphics& g,
+                     Component& /*component*/,
+                     float x, float y, float w, float h,
+                     const bool ticked,
+                     const bool isEnabled,
+                     const bool /*isMouseOverButton*/,
+                     const bool isButtonDown)
+    {
+        Path box;
+        box.addRoundedRectangle (0.0f, 2.0f, 6.0f, 6.0f, 1.0f);
+
+        g.setColour (isEnabled ? Colours::blue.withAlpha (isButtonDown ? 0.3f : 0.1f)
+                               : Colours::lightgrey.withAlpha (0.1f));
+
+        AffineTransform trans (AffineTransform::scale (w / 9.0f, h / 9.0f).translated (x, y));
+
+        g.fillPath (box, trans);
+
+        g.setColour (Colours::black.withAlpha (0.6f));
+        g.strokePath (box, PathStrokeType (2.0f), trans);
+
+        if (ticked)
+        {
+            g.setColour (findColour (thumbColourId));
+
+            Path p;
+            p.addRoundedRectangle(0.8f, 2.8f, 4.5f, 4.5f, 0.5f);
+            g.fillPath (p, trans);
+
+            g.strokePath (p, PathStrokeType (0.3f), trans);
+        }
+    }
+
+
+    void drawToggleButton (Graphics& g,
+                                              ToggleButton& button,
+                                              bool isMouseOverButton,
+                                              bool isButtonDown)
+    {
+
+        const int tickWidth = jmin (20, button.getHeight());
+
+
+
+        drawTickBox (g, button, 4.0f, (button.getHeight() - tickWidth) * 0.5f,
+                     (float) tickWidth, (float) tickWidth,
+                     button.getToggleState(),
+                     button.isEnabled(),
+                     isMouseOverButton,
+                     isButtonDown);
+
+        g.setColour (button.findColour (ToggleButton::textColourId));
+        g.setFont (jmin (15.0f, button.getHeight() * 0.6f));
+
+        if (! button.isEnabled())
+            g.setOpacity (0.5f);
+
+        const int textX = tickWidth + 5;
+
+        g.drawFittedText (button.getButtonText(),
+                          textX, 4,
+                          button.getWidth() - textX - 2, button.getHeight() - 8,
+                          Justification::centredLeft, 10);
+    }
+
 
 
 };

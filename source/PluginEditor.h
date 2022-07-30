@@ -14,13 +14,11 @@
 #include "EnvelopeDisplay.h"
 #include "CustomToggleButton.h"
 #include "CustomLookAndFeel.h"
+#include "FluxModeEditor.h"
 //==============================================================================
 /**
 */
 class TapePerformerAudioProcessorEditor  : public juce::AudioProcessorEditor
-//,
-//public juce::FileDragAndDropTarget,
-//private juce::Timer
 {
 public:
     TapePerformerAudioProcessorEditor (TapePerformerAudioProcessor&);
@@ -30,20 +28,17 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
     
-    void updateToggleState(juce::Button* button, juce::String name);
-    
     enum RadioButtonIds
     {
         FluxModeButtons = 1001
     };
     
 
-
-
 private:
     
     WaveDisplay waveDisplay;
     EnvelopeDisplay envDisplay;
+    FluxModeEditor fluxModeEditor;
     
     
     juce::Label modeLabel         { {}, "Modes"};
@@ -52,18 +47,11 @@ private:
     CustomToggleButton playModeToggle2{"Single", "Sustain"};
 
 
-    juce::Font textFont   { 12.0f, juce::Font::bold};
+    juce::Font textFont   { 14.0f, juce::Font::bold};
 
 
     juce::Label numKeysLabel        { {}, "Fractions" };
     juce::ComboBox numKeysMenu;
-
-    juce::TextButton firstFluxModeButton;
-    juce::TextButton secondFluxModeButton;
-    juce::TextButton thirdFluxModeButton;
-    juce::TextButton fourthFluxModeButton;
-
-
 
     CustomLookAndFeel customLookAndFeel;
     juce::Slider positionSlider;
@@ -77,18 +65,15 @@ private:
     juce::Label durationLabel;
     juce::Label spreadLabel;
     juce::Label transposeLabel;
-    
-    
+    juce::Label gainLabel;
+    juce::Label envShapeLabel;
+
+
     using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
-    
     std::unique_ptr<ButtonAttachment> modeAttachment;
-    std::unique_ptr<ButtonAttachment> firstFluxButtonAttachment;
-    std::unique_ptr<ButtonAttachment> secondFluxButtonAttachment;
-    std::unique_ptr<ButtonAttachment> thirdFluxButtonAttachment;
-    std::unique_ptr<ButtonAttachment> fourthFluxButtonAttachment;
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> keysAvailableAttachment;
-    
+
     using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
     std::unique_ptr<SliderAttachment> positionAttachment;
     std::unique_ptr<SliderAttachment> durationAttachment;

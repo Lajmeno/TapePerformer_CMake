@@ -37,7 +37,7 @@ public:
     double getPositionsParam() { return positionParam; }
     float getSpreadParam() { return spreadParam; }
     
-    void updateParams(float mode, int availableKeys, double position, double duration, float spread, std::vector<float> fluxMode, int rootNote);
+    void updateParams(float mode, int availableKeys, double position, double duration, float spread, std::vector<float> fluxMode, int rootNote, float fluxModeRange);
 
     
     
@@ -62,6 +62,7 @@ private:
     float spreadParam = 0.2f;
 
     int fluxModeParam = 0;
+    float fluxRangeParam = 0;
 
     JUCE_LEAK_DETECTOR (GrainSound)
 };
@@ -93,6 +94,7 @@ public:
     double setStartPosition(GrainSound* sound, bool newlyStarted);
     void setPitchRatio(GrainSound* sound, int midiNoteNumber);
     void setEnvelopeFrequency(GrainSound* sound);
+    void setCurrentFluxPosition(GrainSound* sound);
     
     
     double getPosition();

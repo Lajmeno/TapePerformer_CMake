@@ -51,7 +51,7 @@ bool GrainSound::appliesToChannel (int /*midiChannel*/)
     return true;
 }
 
-void GrainSound::updateParams(float mode, int availableKeys, double position, double duration, float spread, std::vector<float> fluxMode, int rootNote)
+void GrainSound::updateParams(float mode, int availableKeys, double position, double duration, float spread, std::vector<float> fluxMode, int rootNote, float fluxModeRange)
 {
     pitchModeParam = mode >= 1;
 
@@ -91,6 +91,8 @@ void GrainSound::updateParams(float mode, int availableKeys, double position, do
         }
         counter++;
     }
+
+    fluxRangeParam = fluxModeRange;
 
     transpositionParam = rootNote;
     
@@ -231,28 +233,7 @@ double GrainVoice::setStartPosition(GrainSound* sound, bool newlyStarted)
     setEnvelopeFrequency(sound);
     if(!newlyStarted)
     {
-        switch (sound->fluxModeParam)
-        {
-            case 1 : case 2 :
-                numToChange = (numToChange + 1) % sound->numOfKeysAvailable ;
-                break;
-            case 3 :
-                if(numToChange <= 0)
-                {
-                    numToChange *= -1;
-                    numToChange = (numToChange + 1) % (sound->numOfKeysAvailable / 2);
-                }
-                else
-                {
-                    numToChange *= -1;
-                }
-                break;
-            case 4 :
-                numToChange = std::rand() % sound->numOfKeysAvailable;
-                break;
-            default:
-                numToChange = 0;
-        }
+        setCurrentFluxPosition(sound);
     }
     double position;
     if(!sound->pitchModeParam)
@@ -301,12 +282,40 @@ void GrainVoice::setPitchRatio(GrainSound* sound, int midiNoteNumber)
 
 }
 
-
 void GrainVoice::setEnvelopeFrequency(GrainSound* sound)
 {
     auto frequency = 1 / ( (sound->durationParam / pitchRatio) / getSampleRate());
     envCurve.setFrequency ((float) frequency, getSampleRate());
 }
+
+void GrainVoice::setCurrentFluxPosition(GrainSound* sound)
+{
+    int keyRange = (int)(sound->numOfKeysAvailable * sound->fluxRangeParam);
+    switch (sound->fluxModeParam)
+    {
+        case 1 : case 2 :
+            numToChange = (numToChange + 1) % keyRange;
+            break;
+        case 3 :
+            if(numToChange <= 0)
+            {
+                numToChange *= -1;
+                numToChange = (numToChange + 1) % (int) std::ceil(keyRange / 2);
+            }
+            else
+            {
+                numToChange *= -1;
+            }
+            break;
+        case 4 :
+            numToChange = std::rand() % keyRange;
+            break;
+        default:
+            numToChange = 0;
+    }
+}
+
+
 
 
 
